@@ -107,7 +107,7 @@ public class TelaLogin extends JFrame{
                     con_cliente.executaSQL(pesquisa);
 
                     if(con_cliente.resultset.first()){
-                        TelaPrincipal mostra = new TelaPrincipal();
+                        MenuDoador mostra = new MenuDoador();
                         mostra.setVisible(true);
                         dispose();
                     }
