@@ -1,15 +1,23 @@
 package controle;
 
 import javax.swing.*;
+
+import conexao.Conexao;
+
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
 public class MenuOng extends JFrame {
-
+    Conexao con_cliente;
+    
     public MenuOng() {
         super("Menu ONG");
         Container tela = getContentPane();
+        
+        con_cliente = new Conexao(); 
+        con_cliente.conecta(); 
+
         tela.setLayout(null); // Define o layout como null
 
         // Cria a barra de menu (JMenuBar)
@@ -71,9 +79,5 @@ public class MenuOng extends JFrame {
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         setLocationRelativeTo(null); // Centraliza a janela na tela
         setVisible(true);
-    }
-
-    public static void main(String[] args) {
-        new MenuOng();
     }
 }

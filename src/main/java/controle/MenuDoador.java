@@ -1,16 +1,22 @@
 package controle;
 
 import javax.swing.*;
+
+import conexao.Conexao;
+
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
 public class MenuDoador extends JFrame {
-
-    private JPanel contentPanel;
+    Conexao con_cliente;
 
     public MenuDoador() {
         super("Menu Doador");
+
+        con_cliente = new Conexao(); 
+        con_cliente.conecta();
+
         Container tela = getContentPane();
         tela.setLayout(null); // Define o layout como null
 
@@ -89,9 +95,5 @@ public class MenuDoador extends JFrame {
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         setLocationRelativeTo(null);
         setVisible(true);
-    }
-
-    public static void main(String[] args) {
-        new MenuDoador();
     }
 }
