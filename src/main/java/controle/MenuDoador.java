@@ -16,7 +16,7 @@ public class MenuDoador extends JFrame {
 
         // Cria o botão "Fazer Doação"
         JButton botaoFazerDoacao = new JButton("Fazer Doação");
-        botaoFazerDoacao.setBackground(new Color(139, 69, 19)); // Marrom
+        botaoFazerDoacao.setBackground(new Color(140, 58, 28)); // Marrom
         botaoFazerDoacao.setForeground(Color.WHITE);
         botaoFazerDoacao.setBounds(50, 50, 200, 30); // Posição e tamanho do botão
         botaoFazerDoacao.addActionListener(new ActionListener() {
@@ -32,7 +32,7 @@ public class MenuDoador extends JFrame {
 
         // Cria o botão "Ver Doações"
         JButton botaoVerDoacoes = new JButton("Ver Doações");
-        botaoVerDoacoes.setBackground(new Color(139, 69, 19)); // Marrom
+        botaoVerDoacoes.setBackground(new Color(140, 58, 28)); // Marrom
         botaoVerDoacoes.setForeground(Color.WHITE);
         botaoVerDoacoes.setBounds(50, 100, 200, 30); // Posição e tamanho do botão
         botaoVerDoacoes.addActionListener(new ActionListener() {
