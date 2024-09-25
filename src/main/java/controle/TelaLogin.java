@@ -139,14 +139,14 @@ public class TelaLogin extends JFrame{
 
                     if (isDoador) {
                         // A lógica para doador
-//                        TelaDoador telaDoador = new TelaDoador();
-//                        telaDoador.setVisible(true);
+                        MenuDoador telaDoador = new MenuDoador();
+                        telaDoador.setVisible(true);
                         JOptionPane.showMessageDialog(null, "Bem vindo doador!");
                         dispose();
                     } else if (isOng) {
-                        // A lógica para ONG
-//                        TelaOng telaOng = new TelaOng();
-//                        telaOng.setVisible(true);
+//                         A lógica para ONG
+                        MenuOng telaOng = new MenuOng();
+                        telaOng.setVisible(true);
                         JOptionPane.showMessageDialog(null, "Bem vindo ONG!");
                         dispose();
                     } else {
