@@ -1,12 +1,10 @@
 package controle;
 
 import javax.swing.*;
-
+import javax.swing.table.DefaultTableModel;
 import conexao.Conexao;
 
 import java.awt.*;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
 
 public class MenuDoador extends JFrame {
     Conexao con_cliente;
@@ -14,7 +12,7 @@ public class MenuDoador extends JFrame {
     public MenuDoador() {
         super("Menu Doador");
 
-        con_cliente = new Conexao(); 
+        con_cliente = new Conexao();
         con_cliente.conecta();
 
         Container tela = getContentPane();
@@ -22,78 +20,81 @@ public class MenuDoador extends JFrame {
 
         // Cria a barra de menu (JMenuBar)
         JMenuBar menuBar = new JMenuBar();
-        JMenu menuAjuda = new JMenu("Ajuda");
-        JMenuItem menuItemSobre = new JMenuItem("Sobre");
+        JMenu menuAcao = new JMenu("MENU");
 
-        // Adiciona o item "Sobre" ao menu "Ajuda"
-        menuItemSobre.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                // Mostra um diálogo simples quando "Sobre" for clicado
-                JOptionPane.showMessageDialog(null, "New Clothes - Versão 1.0");
+        JMenuItem menuItemFazerDoacao = new JMenuItem("FAZER DOAÇÃO");
+        JMenuItem menuItemExcluirDoacao = new JMenuItem("EXCLUIR DOAÇÃO");
+        JMenuItem menuItemAlterarDoacao = new JMenuItem("ALTERAR DOAÇÃO");
+        JMenuItem menuItemSobre = new JMenuItem("DESENVOLVEDORES");
+        JMenuItem menuItemSair = new JMenuItem("SAIR");
+
+        // Ação para "Fazer Doação"
+        menuItemFazerDoacao.addActionListener(e -> {
+            JFrame novaJanela = new JFrame("Fazer Doação");
+            novaJanela.setSize(300, 200);
+            novaJanela.setVisible(true);
+            novaJanela.setLocationRelativeTo(null);
+        });
+
+        // Ação para "Excluir Doação"
+        menuItemExcluirDoacao.addActionListener(e -> {
+            JFrame novaJanela = new JFrame("Excluir Doação");
+            novaJanela.setSize(300, 200);
+            novaJanela.setVisible(true);
+            novaJanela.setLocationRelativeTo(null);
+        });
+
+        // Ação para "Alterar Doação"
+        menuItemAlterarDoacao.addActionListener(e -> {
+            JFrame novaJanela = new JFrame("Alterar Doação");
+            novaJanela.setSize(300, 200);
+            novaJanela.setVisible(true);
+            novaJanela.setLocationRelativeTo(null);
+        });
+
+        // Ação para "Sobre"
+        menuItemSobre.addActionListener(e ->
+                JOptionPane.showMessageDialog(null, "New Clothes - Versão 1.0\n\nDesenvolvido por:\n\nErick Ferreira Lima\nGustavo Rodrigues\nHernandes Arthur\n\nAlunos da ETEC Zona Leste 2º DS-AMS")
+        );
+
+        // Ação para "Sair"
+        menuItemSair.addActionListener(e -> {
+            int confirm = JOptionPane.showConfirmDialog(null, "Você realmente deseja sair?", "Confirmar Sair", JOptionPane.YES_NO_OPTION);
+            if (confirm == JOptionPane.YES_OPTION) {
+                dispose(); // Fecha a janela
             }
         });
-        menuAjuda.add(menuItemSobre);
-        menuBar.add(menuAjuda);
+
+        menuAcao.add(menuItemFazerDoacao);
+        menuAcao.add(menuItemExcluirDoacao);
+        menuAcao.add(menuItemAlterarDoacao);
+        menuAcao.add(menuItemSobre);
+        menuAcao.add(menuItemSair);
+        menuBar.add(menuAcao);
         setJMenuBar(menuBar); // Adiciona a barra de menu à janela
 
-        // Cria a barra de ferramentas (JToolBar)
-        JToolBar toolBar = new JToolBar();
-        JButton botaoVoltar = new JButton("Voltar");
+        // Criação da tabela
+        String[] colunas = {"ID", "Nome", "Quantidade", "Data da Doação"};
+        DefaultTableModel modeloTabela = new DefaultTableModel(colunas, 0);
 
-        // Ação para o botão "voltar"
-        botaoVoltar.addActionListener(new ActionListener() {
-            public void actionPerformed(ActionEvent e) {
-                // Lógica de atualização (pode ser adaptada para sua necessidade)
-                TelaLogin telaLogin = new TelaLogin();
-                dispose();
-            }
-        });
+        // Adicionando algumas linhas de exemplo
+        modeloTabela.addRow(new Object[]{1, "Camiseta", 10, "2024-01-01"});
+        modeloTabela.addRow(new Object[]{2, "Calça", 5, "2024-02-01"});
+        modeloTabela.addRow(new Object[]{3, "Jaqueta", 2, "2024-03-01"});
+        modeloTabela.addRow(new Object[]{4, "Sapatilha", 8, "2024-04-01"});
+        modeloTabela.addRow(new Object[]{5, "Manto", 3, "2024-05-01"});
 
-        toolBar.add(botaoVoltar);
-        toolBar.setBounds(0, 0, 300, 30); // Define posição e tamanho da barra de ferramentas
-        tela.add(toolBar); // Adiciona a barra de ferramentas à tela
-
-        // Cria o botão "Fazer Doação"
-        JButton botaoFazerDoacao = new JButton("Fazer Doação");
-        botaoFazerDoacao.setBackground(new Color(140, 58, 28)); // Marrom
-        botaoFazerDoacao.setForeground(Color.WHITE);
-        botaoFazerDoacao.setBounds(50, 50, 200, 30); // Posição e tamanho do botão
-        botaoFazerDoacao.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                // Abre uma nova janela vazia
-                JFrame novaJanela = new JFrame("Fazer Doação");
-                novaJanela.setSize(300, 200);
-                novaJanela.setVisible(true);
-                novaJanela.setLocationRelativeTo(null);;
-            }
-        });
-
-        // Cria o botão "Ver Doações"
-        JButton botaoVerDoacoes = new JButton("Ver Doações");
-        botaoVerDoacoes.setBackground(new Color(140, 58, 28)); // Marrom
-        botaoVerDoacoes.setForeground(Color.WHITE);
-        botaoVerDoacoes.setBounds(50, 100, 200, 30); // Posição e tamanho do botão
-        botaoVerDoacoes.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                // Abre uma nova janela vazia
-                JFrame novaJanela = new JFrame("Ver Doações");
-                novaJanela.setSize(300, 200);
-                novaJanela.setVisible(true);
-                novaJanela.setLocationRelativeTo(null);
-            }
-        });
-
-        // Adiciona os botões ao painel
-        tela.add(botaoFazerDoacao);
-        tela.add(botaoVerDoacoes);
+        JTable tabela = new JTable(modeloTabela);
+        JScrollPane scrollPane = new JScrollPane(tabela);
+        scrollPane.setBounds(50, 50, 500, 200); // Posição e tamanho do JScrollPane
+        tela.add(scrollPane); // Adiciona o JScrollPane à tela
 
         // Configura a janela principal
-        setSize(300, 200);
+        setSize(600, 400); // Aumenta o tamanho da janela
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        setLocationRelativeTo(null);
+        setLocationRelativeTo(null); // Centraliza a janela na tela
         setVisible(true);
     }
+
+
 }
