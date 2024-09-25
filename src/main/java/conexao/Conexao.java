@@ -52,6 +52,21 @@ public class Conexao {
         }
     }
 
+    public ResultSet executaQuery(String sql) {
+        ResultSet rs = null;
+        try {
+            if (conexao != null) {
+                statement = conexao.createStatement(ResultSet.TYPE_SCROLL_SENSITIVE, ResultSet.CONCUR_READ_ONLY);
+                rs = statement.executeQuery(sql);
+            } else {
+                JOptionPane.showMessageDialog(null, "Conexão não estabelecida!", "Mensagem do Programa", JOptionPane.WARNING_MESSAGE);
+            }
+        } catch (SQLException e) {
+            JOptionPane.showMessageDialog(null, "Erro no comando SQL! \n ERRO: " + e.getMessage(), "Mensagem do Programa", JOptionPane.ERROR_MESSAGE);
+        }
+        return rs; // Retorna o ResultSet
+    }
+
     public int executaUpdate(String sql) {
         int resultado = 0; // Inicializa o resultado
         try {
@@ -65,5 +80,5 @@ public class Conexao {
             JOptionPane.showMessageDialog(null, "Erro no comando SQL! \n ERRO: " + e.getMessage(), "Mensagem do Programa", JOptionPane.ERROR_MESSAGE);
         }
         return resultado; // Retorna o número de linhas afetadas
-    }    
+    }
 }

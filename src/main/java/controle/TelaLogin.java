@@ -9,6 +9,7 @@ import javax.swing.*;
 import javax.swing.text.MaskFormatter;
 import java.awt.*;
 import java.awt.event.*;
+import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.text.ParseException;
 import java.util.concurrent.ExecutionException;
@@ -115,32 +116,49 @@ public class TelaLogin extends JFrame{
                 ong_tela_cadastro cadastro_ong = new ong_tela_cadastro();
             }
         });
-        
+
 
         entrarButton.addActionListener(new ActionListener() {
-            public void actionPerformed(ActionEvent e){
+            public void actionPerformed(ActionEvent e) {
                 try {
                     char[] senhaArray = senhaField.getPassword();
                     String senha = new String(senhaArray);
+                    String email = usuarioField.getText();
 
-                    String pesquisa = "select * from usuario where username like'" +usuarioField.getText() +"' && senha = "+ senha + "";
-                    con_cliente.executaSQL(pesquisa);
+                    // Consulta para verificar se o email está nas tabelas de doador e ong
+                    String pesquisaDoador = "SELECT * FROM doador WHERE Email = '" + email + "' AND Senha = '" + senha + "'";
+                    String pesquisaOng = "SELECT * FROM ong WHERE Email = '" + email + "' AND Senha = '" + senha + "'";
 
-                    if(con_cliente.resultset.first()){
-                        TelaPrincipal mostra = new TelaPrincipal();
-                        mostra.setVisible(true);
+                    // Verifica se o email está na tabela de doadores
+                    con_cliente.executaSQL(pesquisaDoador);
+                    boolean isDoador = con_cliente.resultset.first();
+
+                    // Verifica se o email está na tabela de ONGs
+                    con_cliente.executaSQL(pesquisaOng);
+                    boolean isOng = con_cliente.resultset.first();
+
+                    if (isDoador) {
+                        // A lógica para doador
+//                        TelaDoador telaDoador = new TelaDoador();
+//                        telaDoador.setVisible(true);
+                        JOptionPane.showMessageDialog(null, "Bem vindo doador!");
                         dispose();
-                    }
-                    else{
-                        JOptionPane.showMessageDialog(null, "\n Usuário não cadastrado!!!", "Mensagem do Programa", JOptionPane.INFORMATION_MESSAGE);
+                    } else if (isOng) {
+                        // A lógica para ONG
+//                        TelaOng telaOng = new TelaOng();
+//                        telaOng.setVisible(true);
+                        JOptionPane.showMessageDialog(null, "Bem vindo ONG!");
+                        dispose();
+                    } else {
+                        JOptionPane.showMessageDialog(null, "Usuário não cadastrado!!!", "Mensagem do Programa", JOptionPane.INFORMATION_MESSAGE);
                         con_cliente.desconecta();
-                        System.exit(0);
                     }
                 } catch (SQLException erro) {
-                    JOptionPane.showMessageDialog(null, "\n Os dados digitados não foram encontrados!! \n", "Mensagem do Programa", JOptionPane.INFORMATION_MESSAGE);
+                    JOptionPane.showMessageDialog(null, "Os dados digitados não foram encontrados!! \n", "Mensagem do Programa", JOptionPane.INFORMATION_MESSAGE);
                 }
             }
         });
+
 
         setSize(800, 500);
         setVisible(true);
@@ -223,6 +241,23 @@ public class TelaLogin extends JFrame{
                     // Verificando se o CPF contém SOMENTE números e tem exatamente 11 dígitos
                     if (!cpf.matches("\\d{11}")) { // Verifica se o CPF contém apenas 11 dígitos numéricos
                         JOptionPane.showMessageDialog(null, "CPF deve ter exatamente 11 dígitos e somente números!", "Erro", JOptionPane.ERROR_MESSAGE);
+                        return;
+                    }
+
+                    // Verificar se o e-mail já existe nas tabelas doador e ong
+                    String verificaEmail = "SELECT COUNT(*) FROM doador WHERE Email = '" + email + "' UNION SELECT COUNT(*) FROM ong WHERE Email = '" + email + "'";
+                    try {
+                        ResultSet rs = con_cliente.executaQuery(verificaEmail);
+                        int count = 0;
+                        while (rs.next()) {
+                            count += rs.getInt(1);
+                        }
+                        if (count > 0) {
+                            JOptionPane.showMessageDialog(null, "Este e-mail já está cadastrado!", "Erro", JOptionPane.ERROR_MESSAGE);
+                            return;
+                        }
+                    } catch (Exception erro) {
+                        JOptionPane.showMessageDialog(null, "Erro ao verificar e-mail: " + erro.getMessage(), "Erro", JOptionPane.ERROR_MESSAGE);
                         return;
                     }
 
@@ -334,31 +369,48 @@ public class TelaLogin extends JFrame{
                 // Ação do Botão Cadastrar
                 cadastrarButton.addActionListener(new ActionListener() {
                     public void actionPerformed(ActionEvent e) {
-                        String nome = nome_ong_txtfield.getText(); // Obter o username
-                        String email = ong_email_txtfield.getText(); // Obter o e-mail
+                        String nome = nome_ong_txtfield.getText();
+                        String email = ong_email_txtfield.getText();
                         String cnpj = cnpj_ong_txtfield.getText();
                         String endereco = ong_endereco_txtfield.getText();
                         String telefone = finalOng_telefone_txtfield.getText();
-                        char[] senhaArray = ong_senha_txtfield.getPassword(); // Obter a senha
+                        char[] senhaArray = ong_senha_txtfield.getPassword();
                         String senha = new String(senhaArray);
+
                         // Verificar se todos os campos foram preenchidos
                         if (nome.isEmpty() || email.isEmpty() || senha.isEmpty() || cnpj.isEmpty() || endereco.isEmpty() || telefone.isEmpty()) {
                             JOptionPane.showMessageDialog(null, "Por favor, preencha todos os campos!", "Erro", JOptionPane.ERROR_MESSAGE);
                             return;
                         }
 
-                        // Verificar se o CNPJ contém SOMENTE números e tem exatamente 14 dígitos
-                        if (!cnpj.matches("\\d{14}")) { // Verifica se o CNPJ contém apenas 14 dígitos numéricos
+                        // Verificar se o CNPJ é válido
+                        if (!cnpj.matches("\\d{14}")) {
                             JOptionPane.showMessageDialog(null, "CNPJ deve ter exatamente 14 dígitos e somente números!", "Erro", JOptionPane.ERROR_MESSAGE);
                             return;
                         }
 
-                        // Consulta para inserir o novo usuário na tabela
-                        String insercao = "INSERT INTO ong (Nome, Email, CNPJ, Endereco, Telefone, Senha) VALUES ('" + nome + "', '" + email + "', '" + cnpj + "', '" + endereco + "', '" + telefone + "', '" + senha + "')";
-
+                        // Verificar se o e-mail já existe nas tabelas doador e ong
+                        String verificaEmail = "SELECT COUNT(*) FROM doador WHERE Email = '" + email + "' UNION SELECT COUNT(*) FROM ong WHERE Email = '" + email + "'";
                         try {
-                            con_cliente.executaUpdate(insercao); // Executa a inserção no banco de dados
-                            JOptionPane.showMessageDialog(null, "ONG cadastrado com sucesso!", "Sucesso", JOptionPane.INFORMATION_MESSAGE);
+                            ResultSet rs = con_cliente.executaQuery(verificaEmail);
+                            int count = 0;
+                            while (rs.next()) {
+                                count += rs.getInt(1);
+                            }
+                            if (count > 0) {
+                                JOptionPane.showMessageDialog(null, "Este e-mail já está cadastrado!", "Erro", JOptionPane.ERROR_MESSAGE);
+                                return;
+                            }
+                        } catch (Exception erro) {
+                            JOptionPane.showMessageDialog(null, "Erro ao verificar e-mail: " + erro.getMessage(), "Erro", JOptionPane.ERROR_MESSAGE);
+                            return;
+                        }
+
+                        // Inserir novo usuário na tabela
+                        String insercao = "INSERT INTO ong (Nome, Email, CNPJ, Endereco, Telefone, Senha) VALUES ('" + nome + "', '" + email + "', '" + cnpj + "', '" + endereco + "', '" + telefone + "', '" + senha + "')";
+                        try {
+                            con_cliente.executaUpdate(insercao);
+                            JOptionPane.showMessageDialog(null, "ONG cadastrada com sucesso!", "Sucesso", JOptionPane.INFORMATION_MESSAGE);
                             dispose(); // Fecha a tela de cadastro após cadastrar
                         } catch (Exception erro) {
                             JOptionPane.showMessageDialog(null, "Erro ao cadastrar ONG: " + erro.getMessage(), "Erro", JOptionPane.ERROR_MESSAGE);
