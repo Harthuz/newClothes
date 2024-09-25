@@ -71,7 +71,7 @@ public class TelaLogin extends JFrame{
 
         // Botão Entrar
         JButton entrarButton = new JButton("Entrar");
-        entrarButton.setBounds(100, 290, 200, 35); // Ajuste o tamanho se necessário
+        entrarButton.setBounds(80, 290, 200, 35); // Ajuste o tamanho se necessário
         
         entrarButton.setFont(new Font("Arial", Font.BOLD, 16));
         entrarButton.setForeground(Color.WHITE);
@@ -80,19 +80,20 @@ public class TelaLogin extends JFrame{
         entrarButton.setOpaque(true);
         painelDireito.add(entrarButton);
 
-        JButton criarContaJLabel = new JButton("Criar conta");
-        criarContaJLabel.setBounds(135, 400, 130, 28);
+        // Botão de cadastrar doador
+        JButton criar_conta_user_jlabel = new JButton("Criar conta - doador");
+        criar_conta_user_jlabel.setBounds(70, 340, 220, 28);
 
-        criarContaJLabel.setFont(new Font("Arial", Font.BOLD, 14));
-        criarContaJLabel.setForeground(Color.WHITE);
-        
-        criarContaJLabel.setBackground(new Color(140, 58, 28)); // Cor #db6e46
-        criarContaJLabel.setOpaque(true);
-        painelDireito.add(criarContaJLabel);
+        criar_conta_user_jlabel.setFont(new Font("Arial", Font.BOLD, 14));
+        criar_conta_user_jlabel.setForeground(Color.WHITE);
 
-        criarContaJLabel.addActionListener(new ActionListener() {
+        criar_conta_user_jlabel.setBackground(new Color(140, 58, 28)); // Cor #db6e46
+        criar_conta_user_jlabel.setOpaque(true);
+        painelDireito.add(criar_conta_user_jlabel);
+
+        criar_conta_user_jlabel.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e){
-                TelaCadastro cadastro = new TelaCadastro();
+                doador_tela_cadastro cadastro = new doador_tela_cadastro();
             }
         });
         
@@ -127,8 +128,8 @@ public class TelaLogin extends JFrame{
         setLocationRelativeTo(null);
     }
 
-public class TelaCadastro extends JFrame {
-    public TelaCadastro() {
+public class doador_tela_cadastro extends JFrame {
+    public doador_tela_cadastro() {
         super("Cadastro");
         
         Container tela = getContentPane();
@@ -140,59 +141,75 @@ public class TelaCadastro extends JFrame {
         cadastroLabel.setBounds(127, 20, 200, 50);
         tela.add(cadastroLabel);
         
-        // Campo Usuário
-        JLabel usuarioLabel = new JLabel("Usuário:");
-        usuarioLabel.setBounds(50, 100, 80, 20);
-        tela.add(usuarioLabel);
+        // Campo nome
+        JLabel nome_doador = new JLabel("Nome:");
+        nome_doador.setBounds(50, 100, 80, 20);
+        tela.add(nome_doador);
 
         JTextField usuarioField = new JTextField();
         usuarioField.setBounds(50, 130, 300, 30);
         tela.add(usuarioField);
 
+        // Campo CPF
+        JLabel cpf_doador_jlabel = new JLabel("CPF:");
+        cpf_doador_jlabel.setBounds(50, 170, 80, 20);
+        tela.add(cpf_doador_jlabel);
+
+        JTextField cpf_doador_txtfield = new JTextField();
+        cpf_doador_txtfield.setBounds(50, 200, 300, 30);
+        tela.add(cpf_doador_txtfield);
+
         // Campo E-mail
         JLabel emailLabel = new JLabel("E-mail:");
-        emailLabel.setBounds(50, 170, 80, 20);
+        emailLabel.setBounds(50, 240, 80, 20);
         tela.add(emailLabel);
 
         JTextField emailField = new JTextField();
-        emailField.setBounds(50, 200, 300, 30);
+        emailField.setBounds(50, 270, 300, 30);
         tela.add(emailField);
 
         // Campo Senha
         JLabel senhaLabel = new JLabel("Senha:");
-        senhaLabel.setBounds(50, 240, 80, 20);
+        senhaLabel.setBounds(50, 310, 80, 20);
         tela.add(senhaLabel);
 
         JPasswordField senhaField = new JPasswordField();
-        senhaField.setBounds(50, 270, 300, 30);
+        senhaField.setBounds(50, 340, 300, 30);
         tela.add(senhaField);
 
         // Botão Cadastrar
         JButton cadastrarButton = new JButton("Cadastrar");
-        cadastrarButton.setBounds(100, 340, 200, 35);
+        cadastrarButton.setBounds(100, 410, 200, 35);
         cadastrarButton.setFont(new Font("Arial", Font.BOLD, 14));
         cadastrarButton.setForeground(Color.WHITE);
         
         cadastrarButton.setBackground(new Color(140, 58, 28)); // Cor #db6e46
         tela.add(cadastrarButton);
 
-        // Ação do Botão Cadastrar (ainda não implementada)
+        // Ação do Botão Cadastrar
         cadastrarButton.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
                 String username = usuarioField.getText(); // Obter o username
                 String email = emailField.getText(); // Obter o e-mail
+                String cpf = cpf_doador_txtfield.getText();
                 char[] senhaArray = senhaField.getPassword(); // Obter a senha
                 String senha = new String(senhaArray);
-        
+
                 // Verificar se todos os campos foram preenchidos
-                if (username.isEmpty() || email.isEmpty() || senha.isEmpty()) {
+                if (username.isEmpty() || email.isEmpty() || senha.isEmpty() || cpf.isEmpty()) {
                     JOptionPane.showMessageDialog(null, "Por favor, preencha todos os campos!", "Erro", JOptionPane.ERROR_MESSAGE);
                     return;
                 }
-        
+
+                // Verificando se o CPF contém SOMENTE números e tem exatamente 11 dígitos
+                if (!cpf.matches("\\d{11}")) { // Verifica se o CPF contém apenas 11 dígitos numéricos
+                    JOptionPane.showMessageDialog(null, "CPF deve ter exatamente 11 dígitos e somente números!", "Erro", JOptionPane.ERROR_MESSAGE);
+                    return;
+                }
+
                 // Consulta para inserir o novo usuário na tabela
-                String insercao = "INSERT INTO usuario (username, email, senha) VALUES ('" + username + "', '" + email + "', '" + senha + "')";
-                
+                String insercao = "INSERT INTO doador (Nome, Email, CPF, Senha) VALUES ('" + username + "', '" + email + "', '" + cpf + "', '" + senha + "')";
+
                 try {
                     con_cliente.executaUpdate(insercao); // Executa a inserção no banco de dados
                     JOptionPane.showMessageDialog(null, "Usuário cadastrado com sucesso!", "Sucesso", JOptionPane.INFORMATION_MESSAGE);
@@ -202,9 +219,9 @@ public class TelaCadastro extends JFrame {
                 }
             }
         });
-        
 
-        setSize(408, 450);
+
+        setSize(408, 600);
         setVisible(true);
         setLocationRelativeTo(null);
     }
