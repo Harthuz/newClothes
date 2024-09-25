@@ -33,7 +33,7 @@ public class MenuOng extends JFrame {
         JToolBar toolBar = new JToolBar();
         JButton botaoVoltar = new JButton("Voltar");
 
-        // Ação para o botão "Atualizar"
+        // Ação para o botão "voltar"
         botaoVoltar.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
                 // Lógica de atualização (pode ser adaptada para sua necessidade)
@@ -49,7 +49,7 @@ public class MenuOng extends JFrame {
 
         // Cria o botão "Ver Doações"
         JButton botaoVerDoacoes = new JButton("Ver Doações");
-        botaoVerDoacoes.setBackground(new Color(139, 69, 19)); // Marrom
+        botaoVerDoacoes.setBackground(new Color(140, 58, 28)); // Marrom
         botaoVerDoacoes.setForeground(Color.WHITE);
         botaoVerDoacoes.setBounds(50, 50, 200, 30); // Posição e tamanho do botão
         botaoVerDoacoes.addActionListener(new ActionListener() {
