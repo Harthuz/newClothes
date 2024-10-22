@@ -32,9 +32,10 @@ USE `bdnewclothes`;
 DROP TABLE IF EXISTS `categoria`;
 CREATE TABLE IF NOT EXISTS `categoria` (
   `cod` int NOT NULL AUTO_INCREMENT,
+  `nome` varchar(80) NOT NULL,
   `descricao` varchar(300) NOT NULL,
   PRIMARY KEY (`cod`)
-) ENGINE=MyISAM DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=MyISAM DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 -- --------------------------------------------------------
 
@@ -51,7 +52,7 @@ CREATE TABLE IF NOT EXISTS `doacao` (
   PRIMARY KEY (`ID_doacao`),
   KEY `ID_doador` (`ID_doador`),
   KEY `ID_ong` (`ID_ong`)
-) ENGINE=MyISAM DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=MyISAM DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 -- --------------------------------------------------------
 
@@ -67,7 +68,7 @@ CREATE TABLE IF NOT EXISTS `doador` (
   `CPF` varchar(30) NOT NULL,
   `senha` varchar(100) NOT NULL,
   PRIMARY KEY (`ID_doador`)
-) ENGINE=MyISAM DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=MyISAM DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 -- --------------------------------------------------------
 
@@ -86,7 +87,7 @@ CREATE TABLE IF NOT EXISTS `itemdoacao` (
   KEY `ID_doacao` (`ID_doacao`),
   KEY `cod` (`cod`),
   KEY `ID_tamanho` (`ID_tamanho`)
-) ENGINE=MyISAM DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=MyISAM DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 -- --------------------------------------------------------
 
@@ -104,7 +105,7 @@ CREATE TABLE IF NOT EXISTS `ong` (
   `telefone` varchar(20) NOT NULL,
   `senha` varchar(100) NOT NULL,
   PRIMARY KEY (`ID_ong`)
-) ENGINE=MyISAM DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=MyISAM DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 -- --------------------------------------------------------
 
@@ -117,7 +118,7 @@ CREATE TABLE IF NOT EXISTS `tamanho` (
   `ID_tamanho` int NOT NULL AUTO_INCREMENT,
   `descricao` varchar(90) NOT NULL,
   PRIMARY KEY (`ID_tamanho`)
-) ENGINE=MyISAM DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=MyISAM DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 -- --------------------------------------------------------
 
@@ -130,14 +131,15 @@ CREATE TABLE IF NOT EXISTS `telefone` (
   `telefone` varchar(30) NOT NULL,
   `ID_doador` int NOT NULL,
   KEY `ID_doador` (`ID_doador`)
-) ENGINE=MyISAM DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=MyISAM DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 COMMIT;
 
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
 /*!40101 SET CHARACTER_SET_RESULTS=@OLD_CHARACTER_SET_RESULTS */;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 
+DROP TABLE IF EXISTS `administrador`;
 CREATE TABLE IF NOT EXISTS `administrador` (
   `email` varchar(100) NOT NULL,
   `senha` varchar(100) NOT NULL
-) ENGINE=MyISAM DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=MyISAM DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
