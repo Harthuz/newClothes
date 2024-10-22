@@ -1,20 +1,22 @@
-/*
- * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
- * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Main.java to edit this template
- */
 package newclothes;
 
-/**
- *
- * @author FATEC ZONA LESTE
- */
-public class NewClothes {
+import conexao.conexao;
 
-    /**
-     * @param args the command line arguments
-     */
-    public static void main(String[] args) {
-        // TODO code application logic here
+public class NewClothes {
+    private conexao con_cliente;
+
+    // Método para conectar
+    public void conectar() {
+        con_cliente = new conexao();
+        try {
+            con_cliente.conecta();
+        } catch (Exception e) {
+            System.out.println("Erro na conexão: " + e.getMessage());
+        }
     }
-    
+
+    public static void main(String[] args) {
+        NewClothes app = new NewClothes(); // Crie uma instância da classe NewClothes
+        app.conectar(); // Chame o método conectar
+    }
 }
