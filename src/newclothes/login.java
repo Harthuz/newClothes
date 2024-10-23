@@ -147,6 +147,14 @@ public class login extends JFrame {
         registerDonorButton.setBackground(Color.decode("#8C3A1C")); // Cor marrom
         registerDonorButton.setForeground(Color.WHITE);
         panel.add(registerDonorButton);
+        registerDonorButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                dispose();
+                CadastrarDoador CadastrarDoador = new CadastrarDoador();
+                CadastrarDoador.setVisible(true);
+            }
+        });
 
         // Botão Cadastrar ONG
         JButton registerOrgButton = new JButton("Cadastrar ONG");

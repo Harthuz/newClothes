@@ -67,4 +67,26 @@ public class conexao {
         return result;
     }
 
+    public boolean emailExiste(String email) {
+        String sql = "SELECT COUNT(*) FROM ( " +
+                "SELECT 1 FROM doador WHERE email = '" + email + "' " +
+                "UNION ALL " +
+                "SELECT 1 FROM ong WHERE email = '" + email + "' " +
+                "UNION ALL " +
+                "SELECT 1 FROM administrador WHERE email = '" + email + "' " +
+                ") AS subquery";
+
+        try {
+            statement = conexao.createStatement();
+            ResultSet resultSet = statement.executeQuery(sql);
+            if (resultSet.next()) {
+                return resultSet.getInt(1) > 0; // Retorna true se o contador for maior que 0
+            }
+        } catch (SQLException e) {
+            JOptionPane.showMessageDialog(null, "Erro ao verificar email! \n ERRO: " + e.getMessage(), "Mensagem do Programa", JOptionPane.ERROR_MESSAGE);
+        }
+
+        return false; // Retorna false se nenhum email foi encontrado
+    }
+
 }

@@ -154,25 +154,38 @@ public class Cadastrar_ong extends JFrame {
                     String email = emailField.getText().trim();
                     String senha = new String(passwordField.getPassword()).trim();
 
-                    // Verificação para evitar SQL Injection
-                    String query = "INSERT INTO ong (nome, email, CNPJ, endereco, telefone, senha) VALUES ('"
-                            + nome + "', '"
-                            + email + "', '"
-                            + cnpj + "', '"
-                            + endereco + "', '"
-                            + telefone + "', '"
-                            + senha + "')";
+                    // Verificação se esse email já existe no sistema
                     try {
-                        Boolean result = con_cliente.atualizaSQL(query);
+                        Boolean emailExiste = con_cliente.emailExiste(email);
 
-                        if (result == true) {
-                            JOptionPane.showMessageDialog(null, "ONG adicionada com sucesso");
-                            dispose();
-                            login login = new login();
-                            login.setVisible(true);
+                        if(emailExiste) {
+                            JOptionPane.showMessageDialog(null, "O email que você esta tentando cadastrar ja existe no sistema ");
+                        } else {
+                            // Criando Query
+                            String query = "INSERT INTO ong (nome, email, CNPJ, endereco, telefone, senha) VALUES ('"
+                                    + nome + "', '"
+                                    + email + "', '"
+                                    + cnpj + "', '"
+                                    + endereco + "', '"
+                                    + telefone + "', '"
+                                    + senha + "')";
+
+                            // Criando nova ONG
+                            try {
+                                Boolean result = con_cliente.atualizaSQL(query);
+
+                                if (result == true) {
+                                    JOptionPane.showMessageDialog(null, "ONG adicionada com sucesso");
+                                    dispose();
+                                    login login = new login();
+                                    login.setVisible(true);
+                                }
+                            }catch (Exception ex) {
+                                JOptionPane.showMessageDialog(null, "Erro ao cadastrar a ONG: " + ex.getMessage());
+                            }
                         }
-                    }catch (Exception ex) {
-                        JOptionPane.showMessageDialog(null, "Erro ao cadastrar a ONG: " + ex.getMessage());
+                    } catch (Exception ex) {
+                        JOptionPane.showMessageDialog(null, "Erro ao Verificar se o email já existe no sistema: " + ex.getMessage());
                     }
                 }
             }
