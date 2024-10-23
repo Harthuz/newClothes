@@ -136,7 +136,7 @@ public class login extends JFrame {
                     }
 
                 } catch (Exception ex) {
-                    JOptionPane.showMessageDialog(null, "Erro: " + ex.getMessage());
+                    JOptionPane.showMessageDialog(null, "Erro ao efetuar o login: " + ex.getMessage());
                 }
             }
         });

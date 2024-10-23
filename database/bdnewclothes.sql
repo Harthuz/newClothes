@@ -143,3 +143,45 @@ CREATE TABLE IF NOT EXISTS `administrador` (
   `email` varchar(100) NOT NULL,
   `senha` varchar(100) NOT NULL
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+-- Inserindo dados na tabela `categoria`
+INSERT INTO `categoria` (`nome`, `descricao`) VALUES
+                                                  ('Roupas', 'Artigos de vestuário para todas as idades'),
+                                                  ('Calçados', 'Diversos tipos de calçados'),
+                                                  ('Acessórios', 'Acessórios de moda e utilidade');
+
+-- Inserindo dados na tabela `doador`
+INSERT INTO `doador` (`nome`, `email`, `CPF`, `senha`) VALUES
+                                                           ('João Silva', 'joao.silva@example.com', '123.456.789-00', 'senha123'),
+                                                           ('Maria Oliveira', 'maria.oliveira@example.com', '987.654.321-00', 'senha456'),
+                                                           ('Pedro Santos', 'pedro.santos@example.com', '123.789.456-00', 'senha789');
+
+-- Inserindo dados na tabela `ong`
+INSERT INTO `ong` (`nome`, `email`, `CNPJ`, `endereco`, `telefone`, `senha`) VALUES
+                                                                                 ('ONG Esperança', 'contato@ongesperanca.org', '12.345.678/0001-99', 'Rua da Solidariedade, 100', '(11) 1234-5678', 'senha123'),
+                                                                                 ('Instituto do Bem', 'contato@institutodobem.org', '98.765.432/0001-01', 'Avenida da Ajuda, 200', '(11) 9876-5432', 'senha456');
+
+-- Inserindo dados na tabela `tamanho`
+INSERT INTO `tamanho` (`descricao`) VALUES
+                                        ('P'),
+                                        ('M'),
+                                        ('G'),
+                                        ('GG');
+
+-- Inserindo dados na tabela `doacao`
+INSERT INTO `doacao` (`dataDoacao`, `ID_doador`, `ID_ong`) VALUES
+                                                               ('2024-10-20', 1, 1),
+                                                               ('2024-10-21', 2, 1),
+                                                               ('2024-10-22', 3, 2);
+
+-- Inserindo dados na tabela `itemdoacao`
+INSERT INTO `itemdoacao` (`qtd`, `ID_doacao`, `cod`, `ID_tamanho`) VALUES
+                                                                       (5, 1, 1, 2),  -- 5 peças de categoria com código 1 (Roupas) em tamanho M
+                                                                       (3, 1, 2, 1),  -- 3 peças de categoria com código 2 (Calçados) em tamanho P
+                                                                       (10, 2, 3, 3); -- 10 peças de categoria com código 3 (Acessórios) em tamanho G
+
+-- Inserindo dados na tabela `telefone`
+INSERT INTO `telefone` (`telefone`, `ID_doador`) VALUES
+                                                     ('(11) 91234-5678', 1),
+                                                     ('(11) 99876-5432', 2),
+                                                     ('(11) 93456-7890', 3);
