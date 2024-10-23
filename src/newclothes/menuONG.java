@@ -118,8 +118,4 @@ public class menuONG extends JFrame {
         add(panel);  // Adicionando o painel ao JFrame
         setVisible(true);  // Tornando o JFrame visível
     }
-
-    public static void main(String[] args) {
-        new menuONG(2);
-    }
 }

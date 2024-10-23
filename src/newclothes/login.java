@@ -9,7 +9,7 @@ import java.awt.event.ActionListener;
 import java.sql.PreparedStatement;
 
 public class login extends JFrame {
-    // Instânciando o banco de dados
+    // Instanciando o banco de dados
     conexao con_cliente;
 
     public login() {
@@ -154,6 +154,14 @@ public class login extends JFrame {
         registerOrgButton.setBackground(Color.decode("#8C3A1C")); // Cor marrom
         registerOrgButton.setForeground(Color.WHITE);
         panel.add(registerOrgButton);
+        registerOrgButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                dispose();
+                Cadastrar_ong cadastrar_ong = new Cadastrar_ong();
+                cadastrar_ong.setVisible(true);
+            }
+        });
 
         // Adiciona o painel ao JFrame
         add(panel);
