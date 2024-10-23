@@ -85,7 +85,7 @@ public class login extends JFrame {
         // Botão de Entrar
         JButton enterButton = new JButton("Entrar");
         enterButton.setBounds(175, 230, 100, 40);
-        enterButton.setBackground(new Color(139, 69, 19)); // Cor marrom
+        enterButton.setBackground(Color.decode("#8C3A1C")); // Cor marrom
         enterButton.setForeground(Color.WHITE);
         panel.add(enterButton);
 
@@ -144,14 +144,14 @@ public class login extends JFrame {
         // Botão Cadastrar Doador
         JButton registerDonorButton = new JButton("Cadastrar doador");
         registerDonorButton.setBounds(50, 300, 150, 40);
-        registerDonorButton.setBackground(new Color(139, 69, 19)); // Cor marrom
+        registerDonorButton.setBackground(Color.decode("#8C3A1C")); // Cor marrom
         registerDonorButton.setForeground(Color.WHITE);
         panel.add(registerDonorButton);
 
         // Botão Cadastrar ONG
         JButton registerOrgButton = new JButton("Cadastrar ONG");
         registerOrgButton.setBounds(250, 300, 150, 40);
-        registerOrgButton.setBackground(new Color(139, 69, 19)); // Cor marrom
+        registerOrgButton.setBackground(Color.decode("#8C3A1C")); // Cor marrom
         registerOrgButton.setForeground(Color.WHITE);
         panel.add(registerOrgButton);
 
