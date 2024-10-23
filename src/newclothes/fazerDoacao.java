@@ -9,6 +9,9 @@ import java.awt.*;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.text.ParseException;
+import javax.swing.*;
+import java.awt.event.WindowAdapter;
+import java.awt.event.WindowEvent;
 import java.text.SimpleDateFormat;
 
 import components.components;
@@ -41,6 +44,19 @@ public class fazerDoacao extends JFrame{
             // Trata exceções SQL
             JOptionPane.showMessageDialog(null, "Erro ao buscar o ID da última doação: " + e.getMessage(), "Mensagem do Programa", JOptionPane.ERROR_MESSAGE);
         }
+
+        // Adicionando WindowListener
+        this.addWindowListener(new WindowAdapter() {
+            @Override
+            public void windowClosing(WindowEvent e) {
+                try {
+                    String delete_sql = "DELETE FROM doador WHERE ID_doador = '" + idDoacao + "'";
+                    con_cliente.statement.executeUpdate(delete_sql);
+                } catch (SQLException erro) {
+                    JOptionPane.showMessageDialog(null, "\n Erro na gravação de nova doação: \n" +erro, "Mensagem do Programa", JOptionPane.INFORMATION_MESSAGE);
+                }
+            }
+        });
 
         // Configuração da janela
         setTitle("Fazer Doação");

@@ -52,6 +52,7 @@ public class menuDoador extends JFrame {
                 } catch (SQLException erro) {
                     JOptionPane.showMessageDialog(null, "\n Erro na gravação de nova doação: \n" +erro, "Mensagem do Programa", JOptionPane.INFORMATION_MESSAGE);
                 }
+
                 new fazerDoacao();
             }
         });
