@@ -1,7 +1,13 @@
 package newclothes;
 
 import javax.swing.*;
+import javax.swing.text.DateFormatter;
+import javax.swing.text.MaskFormatter;
+
+import java.util.Date;
 import java.awt.*;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 
 import components.components;
 import conexao.conexao;
@@ -21,7 +27,7 @@ public class fazerDoacao extends JFrame{
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         setLayout(null);  // Usando layout nulo para setBounds
 
-        // Label Fazer Doação
+        // Label Titulo Página
         JLabel doacaoLabel = components.criarLabel("SUA DOAÇÃO CONTÉM OS ITENS:", "<u>", "Arial", 14, Font.BOLD, 20, 20, 300, 30);
         add(doacaoLabel);
 
@@ -52,10 +58,47 @@ public class fazerDoacao extends JFrame{
         // Adicionando o JScrollPane à janela principal
         add(scrollPane);
 
+        // Botão Fazer Doação
+        JButton adicionarDoacaoButton = components.criarBotao("+","<b>","#8C3A1C","Arial",Font.BOLD,30,Color.WHITE,20,319,518,40);
+        add(adicionarDoacaoButton);
+
+        // Criar o JLabel para a data de envio
+        JLabel dataEnvioLabel = new JLabel("Data de Envio: ");
+        dataEnvioLabel.setFont(new Font("Arial", Font.BOLD, 14));
+        dataEnvioLabel.setBounds(20, 400, 250, 30);
+
+        // Criar o campo de texto formatado com máscara
+        JFormattedTextField dataEnvioField = new JFormattedTextField(createMaskFormatter("##/##/####"));
+        dataEnvioField.setBounds(126, 400, 100, 30);
+        dataEnvioField.setValue(""); // Iniciar sem valor
+
+        // Adicionar os componentes à janela
+        add(dataEnvioLabel);
+        add(dataEnvioField);
+
+        // Botão Fazer Doação
+        JButton fazerDoacaoButton = components.criarBotao("Fazer Doação","<b>","#8C3A1C","Arial",Font.PLAIN,18,Color.WHITE,368,390,170,40);
+        add(fazerDoacaoButton);
+
+
         // Tornar a janela visível
         setVisible(true);
         setLocationRelativeTo(null);
-        setSize(600,450);        
+        setSize(600,500);        
+    }
+
+        // Método para criar a máscara de formatação
+    private static MaskFormatter createMaskFormatter(String mask) {
+        MaskFormatter formatter = null;
+        try {
+            formatter = new MaskFormatter(mask);
+            formatter.setPlaceholderCharacter('_'); // Placeholder para caracteres não digitados
+            formatter.setAllowsInvalid(false); // Não permite entradas inválidas
+            formatter.setValueContainsLiteralCharacters(false); // Não considera caracteres literais no valor
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
+        return formatter;
     }
 
     public static void main(String[] args) {
