@@ -359,7 +359,10 @@ alterar.setForeground(Color.WHITE);
         sair.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                // Fecha a janela
+                    // Fecha a janela
+                MenuAdmin MenuAdmin = new MenuAdmin();
+        MenuAdmin.setVisible(true); // Mostra a janela modal;  
+        dispose();// TODO add your handling code here:
                 dispose();
             }
         });
@@ -493,6 +496,6 @@ alterar.setForeground(Color.WHITE);
 
     public static void main(String[] args) {
         CrudOngns app = new CrudOngns();
-        app.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        app.setDefaultCloseOperation(JFrame.HIDE_ON_CLOSE);
     }
 }

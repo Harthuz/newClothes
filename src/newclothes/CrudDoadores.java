@@ -337,6 +337,9 @@ alterar.setForeground(Color.WHITE);
             @Override
             public void actionPerformed(ActionEvent e) {
                 // Fecha a janela
+                MenuAdmin MenuAdmin = new MenuAdmin();
+        MenuAdmin.setVisible(true); // Mostra a janela modal;  
+        dispose();// TODO add your handling code here:
                 dispose();
             }
         });
@@ -452,6 +455,10 @@ alterar.setForeground(Color.WHITE);
         } catch (SQLException erro) {
             JOptionPane.showMessageDialog(null, "Não localizou dados: " + erro, "Mensagem do Programa", JOptionPane.ERROR_MESSAGE);
         }
+    }
+    public static void main(String[] args) {
+        CrudDoadores app = new CrudDoadores();
+        app.setDefaultCloseOperation(JFrame.HIDE_ON_CLOSE);
     }
     
 }
