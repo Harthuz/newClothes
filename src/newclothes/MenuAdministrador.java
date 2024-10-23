@@ -6,11 +6,15 @@ package newclothes;
 
 import conexao.conexao;
 
+import java.awt.*;
+
 /**
  *
  * @author Erick
  */
 public class MenuAdministrador extends javax.swing.JFrame {
+
+
 
     /**
      * Creates new form MenuAdministrador
@@ -29,9 +33,6 @@ public class MenuAdministrador extends javax.swing.JFrame {
     @SuppressWarnings("unchecked")
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
-        conexao con_cliente;
-        con_cliente = new conexao(); 
-        con_cliente.conecta(); 
 
         jPanel1 = new javax.swing.JPanel();
         jLabel1 = new javax.swing.JLabel();
@@ -219,8 +220,8 @@ public class MenuAdministrador extends javax.swing.JFrame {
     }//GEN-LAST:event_jMenuItem2ActionPerformed
 
     private void jButton5ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton5ActionPerformed
-CrudOngns CrudOngns = new CrudOngns();
-      CrudOngns.setVisible(true);        // TODO add your handling code here:
+        CrudOngns crudDialog = new CrudOngns();
+        crudDialog.setVisible(true); // Mostra a janela modal;        // TODO add your handling code here:
     }//GEN-LAST:event_jButton5ActionPerformed
 
     /**

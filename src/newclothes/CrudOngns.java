@@ -11,7 +11,7 @@ import java.awt.event.ActionListener;
 import java.text.ParseException;
 import java.sql.*;
 
-public class CrudOngns extends JFrame { 
+public class CrudOngns extends JFrame {
     conexao con_cliente;
     JTable clienteles; // Defina clienteles como um campo da classe
     DefaultTableModel tableModel; // Adicione um modelo de tabela
@@ -19,11 +19,12 @@ public class CrudOngns extends JFrame {
     JTextField codigoJTextField;
     JTextField nomeJTextField;
     JTextField SenhaJTextField;
+    JTextField EnderecoJTextField;
     JFormattedTextField CNPJJFormattedTextField,TelefoneJFormattedTextField ;
     JTextField emailJTextField;
     JButton primeiro, anterior, proximo, ultimo, gravar, novo, excluir, alterar;
 
-    public CrudOngns() { 
+    public CrudOngns() {
         super("CRUD Ongs Administrador");
         con_cliente = new conexao();
         con_cliente.conecta();
@@ -78,8 +79,13 @@ public class CrudOngns extends JFrame {
         EnderecoJLabel.setFont(fonteNegrito);
         EnderecoJLabel.setForeground(new Color(0, 51, 102));
         tela.add(EnderecoJLabel);
-        
-           JLabel TelefoneJLabel = new JLabel("Telefone:");
+
+        EnderecoJTextField = new JTextField();
+        EnderecoJTextField.setBounds(110, 140, 200, 20);
+        tela.add(EnderecoJTextField);
+
+
+        JLabel TelefoneJLabel = new JLabel("Telefone:");
         TelefoneJLabel.setBounds(20, 170, 100, 20);
         TelefoneJLabel.setFont(fonteNegrito);
         TelefoneJLabel.setForeground(new Color(0, 51, 102));
@@ -92,7 +98,7 @@ public class CrudOngns extends JFrame {
         tela.add(SenhaJLabel);
 
         SenhaJTextField = new JTextField();
-        SenhaJTextField.setBounds(90, 140, 200, 25);
+        SenhaJTextField.setBounds(90, 200, 200, 25);
         SenhaJTextField.setFont(fontePadrao);
         tela.add(SenhaJTextField);
 
@@ -102,10 +108,10 @@ public class CrudOngns extends JFrame {
         proximo = new JButton("Próximo");
         ultimo = new JButton("Último");
 
-        primeiro.setBounds(20, 170, 100, 20);
-        anterior.setBounds(120, 170, 100, 20);
-        proximo.setBounds(220, 170, 100, 20);
-        ultimo.setBounds(320, 170, 100, 20);
+        primeiro.setBounds(20, 250, 100, 20);
+        anterior.setBounds(120, 250, 100, 20);
+        proximo.setBounds(220, 250, 100, 20);
+        ultimo.setBounds(320, 250, 100, 20);
 
        primeiro.setFont(fontePadrao);
 primeiro.setForeground(Color.WHITE);
@@ -137,10 +143,10 @@ ultimo.setForeground(Color.WHITE);
         excluir = new JButton("Excluir");
         alterar = new JButton("Alterar");
 
-        novo.setBounds(20, 420, 150, 20);
-        gravar.setBounds(170, 420, 100, 20);
-        excluir.setBounds(280, 420, 100, 20);
-        alterar.setBounds(380, 420, 100, 20);
+        novo.setBounds(20, 520, 150, 20);
+        gravar.setBounds(180, 520, 100, 20);
+        excluir.setBounds(290, 520, 100, 20);
+        alterar.setBounds(400, 520, 100, 20);
         
         novo.setFont(fontePadrao);
 novo.setForeground(Color.WHITE);
@@ -215,6 +221,8 @@ alterar.setForeground(Color.WHITE);
                 nomeJTextField.setText("");
                 CNPJJFormattedTextField.setText("");
                 emailJTextField.setText("");
+                EnderecoJTextField.setText("");
+                TelefoneJFormattedTextField.setText("");
                  SenhaJTextField.setText("");
 
                 
@@ -222,54 +230,58 @@ alterar.setForeground(Color.WHITE);
 
             }});
 
-       gravar.addActionListener(new ActionListener() {
-    public void actionPerformed(ActionEvent e) {
-        String nome = nomeJTextField.getText();
-        String email = emailJTextField.getText(); 
-        String CPF = CNPJJFormattedTextField.getText();
-        String Senha = SenhaJTextField.getText();
+        gravar.addActionListener(new ActionListener() {
+            public void actionPerformed(ActionEvent e) {
+                String nome = nomeJTextField.getText();
+                String email = emailJTextField.getText();
+                String CNPJ = CNPJJFormattedTextField.getText();
+                String Endereco = EnderecoJTextField.getText();
+                String Telefone = TelefoneJFormattedTextField.getText();
+                String Senha = SenhaJTextField.getText();
 
-        try {
-            // Corrigido para incluir a coluna Senha e remover o '+' desnecessário
-            String insert_sql = "INSERT INTO doador (nome, email, CPF, Senha) VALUES ('"
-                    + nome + "', '" + email + "', '" + CPF + "', '" + Senha + "')";
-                    
-            // Execute o SQL para inserção
-            con_cliente.statement.executeUpdate(insert_sql);
-            JOptionPane.showMessageDialog(null, "Gravação realizada com sucesso!!!", "Mensagem do Programa", JOptionPane.INFORMATION_MESSAGE);
+                try {
+                    // Corrigido para remover a vírgula extra
+                    String insert_sql = "INSERT INTO ong (nome, email, CNPJ, Endereco, Telefone, Senha) VALUES ('"
+                            + nome + "', '" + email + "', '" + CNPJ + "', '" + Endereco + "', '" + Telefone + "', '" + Senha + "')";
 
-            con_cliente.executaSQL("SELECT * FROM doador ORDER BY ID_doador");
-            preencherTabela(); // Atualiza a tabela após a inserção
-        } catch (SQLException erro) {
-            JOptionPane.showMessageDialog(null, "\n Erro na gravação: \n" + erro, "Mensagem do Programa", JOptionPane.INFORMATION_MESSAGE);
-        }
-    }
-});
+                    // Execute o SQL para inserção
+                    con_cliente.statement.executeUpdate(insert_sql);
+                    JOptionPane.showMessageDialog(null, "Gravação realizada com sucesso!!!", "Mensagem do Programa", JOptionPane.INFORMATION_MESSAGE);
 
+                    con_cliente.executaSQL("SELECT * FROM ong ORDER BY ID_ong");
+                    preencherTabela(); // Atualiza a tabela após a inserção
+                } catch (SQLException erro) {
+                    JOptionPane.showMessageDialog(null, "\n Erro na gravação: \n" + erro, "Mensagem do Programa", JOptionPane.INFORMATION_MESSAGE);
+                }
+            }
+        });
 
         alterar.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
                 String nome = nomeJTextField.getText();
-                String email = emailJTextField.getText(); // Correção para usar o campo correto]
-                 String CPF = CNPJJFormattedTextField.getText();
-                  String Senha = SenhaJTextField.getText();
+                String email = emailJTextField.getText();
+                String CNPJ = CNPJJFormattedTextField.getText();
+                String Endereco = EnderecoJTextField.getText();
+                String Telefone = TelefoneJFormattedTextField.getText();
+                String Senha = SenhaJTextField.getText();
                 String sql;
                 String msg;
 
                 try {
                     if (codigoJTextField.getText().equals("")) {
-                        sql = "INSERT INTO doador (nome,email,CPF) VALUES ('" + nome + "','" +email+  "','"+CPF+ "', +'"+Senha + "')";
+                        sql = "INSERT INTO ong (nome, email, CNPJ, Endereco, Telefone, Senha) VALUES ('"
+                                + nome + "', '" + email + "', '" + CNPJ + "', '" + Endereco + "', '" + Telefone + "', '" + Senha + "')";
                         msg = "Gravação de um novo registro";
                     } else {
                         // Corrigido para usar as colunas corretas e SQL válido
-                        sql = "UPDATE doador SET nome='" + nome + "', email='" +email+  "', CPF='" + CPF + "',Senha='" + Senha + "' WHERE ID_doador = " + codigoJTextField.getText();
+                        sql = "UPDATE ong SET nome='" + nome + "', email='" + email + "', CNPJ='" + CNPJ + "', Endereco='" + Endereco + "', Telefone='" + Telefone + "', Senha='" + Senha + "' WHERE ID_ong = " + codigoJTextField.getText();
                         msg = "Alteração de registro";
                     }
 
                     con_cliente.statement.executeUpdate(sql);
                     JOptionPane.showMessageDialog(null, msg + " realizada com sucesso!", "Mensagem do Programa", JOptionPane.INFORMATION_MESSAGE);
 
-                    con_cliente.executaSQL("SELECT * FROM doador ORDER BY ID_doador");
+                    con_cliente.executaSQL("SELECT * FROM ong ORDER BY ID_ong");
                     preencherTabela(); // Atualiza a tabela após a alteração
 
                 } catch (SQLException errosql) {
@@ -277,20 +289,19 @@ alterar.setForeground(Color.WHITE);
                 }
             }
         });
-
         excluir.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
                 String sql = "";
                 try {
                     int resposta = JOptionPane.showConfirmDialog(null, "Deseja excluir o registro?", "Confirmar Exclusão", JOptionPane.YES_NO_OPTION);
                     if (resposta == JOptionPane.YES_OPTION) {
-                        sql = "DELETE FROM doador WHERE ID_doador = " + codigoJTextField.getText(); // Use o campo de código adaptado
+                        sql = "DELETE FROM ong WHERE ID_ong = " + codigoJTextField.getText(); // Use o campo de código adaptado
                         int excluiu = con_cliente.statement.executeUpdate(sql);
 
                         if (excluiu == 1) {
                             JOptionPane.showMessageDialog(null, "Exclusão realizada com sucesso!", "Mensagem do Programa", JOptionPane.INFORMATION_MESSAGE);
 
-                            con_cliente.executaSQL("SELECT * FROM doador ORDER BY ID_doador");
+                            con_cliente.executaSQL("SELECT * FROM ong ORDER BY ID_ong");
                             preencherTabela();
                             con_cliente.resultset.first();
                             posicionarRegistro();
@@ -308,15 +319,15 @@ alterar.setForeground(Color.WHITE);
 
 // Barra de pesquisa
         JLabel searchLabel = new JLabel("Pesquisar:");
-        searchLabel.setBounds(20, 470, 100, 20);  // Ajuste a posição conforme necessário
+        searchLabel.setBounds(20, 600, 100, 20);  // Ajuste a posição conforme necessário
         tela.add(searchLabel);
 
         JTextField searchTextField = new JTextField();
-        searchTextField.setBounds(90, 470, 200, 20);  // Ajuste a posição conforme necessário
+        searchTextField.setBounds(90, 600, 200, 20);  // Ajuste a posição conforme necessário
         tela.add(searchTextField);
 
         JButton searchButton = new JButton("Pesquisar");
-        searchButton.setBounds(290, 470, 100, 20);  // Ajuste a posição conforme necessário
+        searchButton.setBounds(340, 600, 100, 20);  // Ajuste a posição conforme necessário
         tela.add(searchButton);
 
 // Adiciona um ActionListener para filtrar a tabela à medida que o usuário digita
@@ -338,7 +349,7 @@ alterar.setForeground(Color.WHITE);
         });
 
  JButton sair = new JButton("Sair");
-        sair.setBounds(600, 470, 100, 20);
+        sair.setBounds(750, 600, 100, 20);
         sair.setFont(new Font("Verdana", Font.PLAIN, 14));
         sair.setBackground(new Color(255, 102, 102));  // Cor do fundo (Vermelho claro)
         sair.setForeground(Color.WHITE);  // Cor do texto (Branco)
@@ -363,7 +374,7 @@ alterar.setForeground(Color.WHITE);
             try {
                 CNPJMask = new MaskFormatter("##.###.###/####-##");
                 CNPJJFormattedTextField = new JFormattedTextField(CNPJMask);
-                CNPJJFormattedTextField.setBounds(90, 80, 100, 25);
+                CNPJJFormattedTextField.setBounds(90, 80, 150, 25);
                 tela.add(CNPJJFormattedTextField);
             } catch (ParseException e) {
                 e.printStackTrace();
@@ -373,7 +384,7 @@ alterar.setForeground(Color.WHITE);
             try {
                 TelefoneMask = new MaskFormatter("(##) ####-####");
                 TelefoneJFormattedTextField = new JFormattedTextField(TelefoneMask);
-                TelefoneJFormattedTextField.setBounds(90, 170, 100, 25);
+                TelefoneJFormattedTextField.setBounds(100, 170, 100, 25);
                 tela.add(TelefoneJFormattedTextField);
             } catch (ParseException e) {
                 e.printStackTrace();
@@ -385,10 +396,10 @@ alterar.setForeground(Color.WHITE);
         tela.add(emailJTextField);
 
         clienteles = new JTable(); // Inicialize clienteles
-        clienteles.setBounds(20, 200, 700, 200);
+        clienteles.setBounds(20, 300, 800, 200);
 
         JScrollPane clienteScrollPane = new JScrollPane();
-        clienteScrollPane.setBounds(20, 200, 700, 200);
+        clienteScrollPane.setBounds(20, 300, 800, 200);
         tela.add(clienteScrollPane);
 
         clienteles.setBorder(BorderFactory.createLineBorder(Color.BLACK));
@@ -397,9 +408,9 @@ alterar.setForeground(Color.WHITE);
         // Inicialize o modelo de tabela e atribua ao JTable
         tableModel = new DefaultTableModel(
             new Object[][] {},
-            new String[] {"Código", "Nome", "Email" , "CPF" , "Senha"}
+            new String[] {"ID_ONG", "Nome", "Email" , "CNPJ" , "Endereco","Telefone" ,"Senha" ,}
         ) {
-            boolean[] canEdit = new boolean[] { false, false, false, false };
+            boolean[] canEdit = new boolean[] { false, false, false, false, false, false, false };
 
             public boolean isCellEditable(int rowIndex, int columnIndex) {
                 return canEdit[columnIndex];
@@ -412,12 +423,12 @@ alterar.setForeground(Color.WHITE);
         clienteles.setAutoCreateRowSorter(true);
 
         // Executa a consulta SQL
-        con_cliente.executaSQL("select * from doador order by ID_doador");
+        con_cliente.executaSQL("select * from ong order by ID_ong");
 
         preencherTabela();
         posicionarRegistro();
 
-        setSize(750, 550);
+        setSize(900, 700);
         setVisible(true);
         setLocationRelativeTo(null);
     }
@@ -425,10 +436,13 @@ alterar.setForeground(Color.WHITE);
 
     public void preencherTabela() {
         // Configuração das larguras das colunas
-        clienteles.getColumnModel().getColumn(0).setPreferredWidth(4);
+        clienteles.getColumnModel().getColumn(0).setPreferredWidth(50);
         clienteles.getColumnModel().getColumn(1).setPreferredWidth(150);
-        clienteles.getColumnModel().getColumn(2).setPreferredWidth(11);
-          clienteles.getColumnModel().getColumn(3).setPreferredWidth(30);
+        clienteles.getColumnModel().getColumn(2).setPreferredWidth(150);
+          clienteles.getColumnModel().getColumn(3).setPreferredWidth(150);
+        clienteles.getColumnModel().getColumn(4).setPreferredWidth(150);
+        clienteles.getColumnModel().getColumn(5).setPreferredWidth(100);
+        clienteles.getColumnModel().getColumn(6).setPreferredWidth(90);
           
    
 
@@ -439,10 +453,12 @@ alterar.setForeground(Color.WHITE);
             con_cliente.resultset.beforeFirst();
             while (con_cliente.resultset.next()) {
                 tableModel.addRow(new Object[]{
-                    con_cliente.resultset.getString("ID_doador"),
+                    con_cliente.resultset.getString("ID_ong"),
                     con_cliente.resultset.getString("nome"),
                     con_cliente.resultset.getString("email"),
-                         con_cliente.resultset.getString("CPF"),
+                         con_cliente.resultset.getString("CNPJ"),
+                        con_cliente.resultset.getString("endereco"),
+                        con_cliente.resultset.getString("telefone"),
                          con_cliente.resultset.getString("Senha")
                          
                 });
@@ -463,10 +479,12 @@ alterar.setForeground(Color.WHITE);
 
     public void mostrar_dados() {
         try {
-            codigoJTextField.setText(con_cliente.resultset.getString("ID_doador"));
+            codigoJTextField.setText(con_cliente.resultset.getString("ID_ong"));
             nomeJTextField.setText(con_cliente.resultset.getString("nome"));
             emailJTextField.setText(con_cliente.resultset.getString("email"));
-             CNPJJFormattedTextField.setText(con_cliente.resultset.getString("CPF"));
+             CNPJJFormattedTextField.setText(con_cliente.resultset.getString("CNPJ"));
+            EnderecoJTextField.setText(con_cliente.resultset.getString("Endereco"));
+            TelefoneJFormattedTextField.setText(con_cliente.resultset.getString("Telefone"));
              SenhaJTextField.setText(con_cliente.resultset.getString("Senha"));
         } catch (SQLException erro) {
             JOptionPane.showMessageDialog(null, "Não localizou dados: " + erro, "Mensagem do Programa", JOptionPane.ERROR_MESSAGE);
