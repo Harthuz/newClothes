@@ -50,4 +50,21 @@ public class conexao {
             JOptionPane.showMessageDialog(null, "Erro no comando SQL! \n ERRO: " + e.getMessage(), "Mensagem do Programa", JOptionPane.ERROR_MESSAGE);
         }
     }
+
+    public boolean atualizaSQL(String sql) {
+        boolean result = false;
+        try {
+            if (conexao != null) {
+                statement = conexao.createStatement();
+                int rowsAffected = statement.executeUpdate(sql); // Executa o comando de atualização
+                return  result = rowsAffected > 0; // Retorna true se alguma linha foi afetada
+            } else {
+                JOptionPane.showMessageDialog(null, "Conexão não estabelecida!", "Mensagem do Programa", JOptionPane.WARNING_MESSAGE);
+            }
+        } catch (SQLException e) {
+            JOptionPane.showMessageDialog(null, "Erro no comando SQL! \n ERRO: " + e.getMessage(), "Mensagem do Programa", JOptionPane.ERROR_MESSAGE);
+        }
+        return result;
+    }
+
 }
