@@ -37,9 +37,7 @@ public class menuDoador extends JFrame {
         // Adiciona ActionListener ao botão
         novaDoacaoButton.addActionListener(new ActionListener() {
             @Override
-            public void actionPerformed(ActionEvent e) {
-                new fazerDoacao();
-                
+            public void actionPerformed(ActionEvent e) {                
                 con_cliente = new conexao();
                 con_cliente.conecta();
 
@@ -51,11 +49,10 @@ public class menuDoador extends JFrame {
                 try {
                     String insert_sql = "insert into doacao (dataDoacao,ID_doador,ID_ong) values ('"+sqlDate+"','"+idDoador+"','"+idOng+"')";
                     con_cliente.statement.executeUpdate(insert_sql);
-                    JOptionPane.showMessageDialog(null, "Gravação realizada com sucesso!!", "Mensagem do Programa", JOptionPane.INFORMATION_MESSAGE);
-
                 } catch (SQLException erro) {
                     JOptionPane.showMessageDialog(null, "\n Erro na gravação de nova doação: \n" +erro, "Mensagem do Programa", JOptionPane.INFORMATION_MESSAGE);
                 }
+                new fazerDoacao();
             }
         });
 

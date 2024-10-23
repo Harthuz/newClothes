@@ -6,6 +6,8 @@ import javax.swing.text.MaskFormatter;
 
 import java.util.Date;
 import java.awt.*;
+import java.sql.ResultSet;
+import java.sql.SQLException;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 
@@ -21,11 +23,35 @@ public class fazerDoacao extends JFrame{
         con_cliente = new conexao();
         con_cliente.conecta();
 
+        int idDoacao = 1;
+
+        try {
+            // Consulta para obter o ID da última doação
+            String sql = "SELECT ID_doacao FROM doacao ORDER BY dataDoacao DESC, ID_doacao DESC LIMIT 1";
+            ResultSet resultSet = con_cliente.statement.executeQuery(sql); // Usando executeQuery
+
+            if (resultSet.next()) { // Verifica se há resultados
+                idDoacao = resultSet.getInt("ID_doacao"); // Obtém o ID da última doação
+            } else {
+                // Caso não haja doações
+                JOptionPane.showMessageDialog(null, "Nenhuma doação encontrada.", "Mensagem do Programa", JOptionPane.WARNING_MESSAGE);
+                System.exit(0);
+            }
+        } catch (SQLException e) {
+            // Trata exceções SQL
+            JOptionPane.showMessageDialog(null, "Erro ao buscar o ID da última doação: " + e.getMessage(), "Mensagem do Programa", JOptionPane.ERROR_MESSAGE);
+        }
+
         // Configuração da janela
         setTitle("Fazer Doação");
         setSize(400, 300);
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         setLayout(null);  // Usando layout nulo para setBounds
+
+        String numeroString = String.valueOf(idDoacao);
+        // Label idDoacao
+        JLabel idDoacaoLabel = components.criarLabel(numeroString, "<u>", "Arial", 14, Font.BOLD, 10, 10, 300, 30);
+        add(idDoacaoLabel);
 
         // Label Titulo Página
         JLabel doacaoLabel = components.criarLabel("SUA DOAÇÃO CONTÉM OS ITENS:", "<u>", "Arial", 14, Font.BOLD, 20, 20, 300, 30);
