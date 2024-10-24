@@ -38,9 +38,6 @@ public class menuDoador extends JFrame {
         novaDoacaoButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {                
-                con_cliente = new conexao();
-                con_cliente.conecta();
-
                 Date data = new Date();
                 java.sql.Date sqlDate = new java.sql.Date(data.getTime()); // Convert to sql.Date
                 int idDoador = 1;
