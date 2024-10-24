@@ -22,6 +22,11 @@ public class doacoesADM extends JFrame {
 
     public doacoesADM() {
         super("CRUD Doações");
+        setSize(700, 700);
+        setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        setLocationRelativeTo(null); // Centraliza a tela
+        setResizable(false);
+
         con_cliente = new conexao();
         con_cliente.conecta();
 
@@ -134,7 +139,7 @@ public class doacoesADM extends JFrame {
         alterar.setForeground(Color.WHITE);
 
         JButton sair = new JButton("Sair");
-        sair.setBounds(750, 600, 100, 20);
+        sair.setBounds(500, 420, 100, 20);
         sair.setFont(new Font("Verdana", Font.PLAIN, 14));
         sair.setBackground(new Color(255, 102, 102));  // Cor do fundo (Vermelho claro)
         sair.setForeground(Color.WHITE);  // Cor do texto (Branco)
@@ -144,17 +149,12 @@ public class doacoesADM extends JFrame {
         sair.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                    // Fecha a janela
+                // Fecha a janela
                 MenuAdmin MenuAdmin = new MenuAdmin();
-        MenuAdmin.setVisible(true); // Mostra a janela modal;  
-        dispose();// TODO add your handling code here:
-                dispose();
+                MenuAdmin.setVisible(true); // Mostra a janela modal;
+                dispose();// TODO add your handling code here:
             }
         });
-
-
-
-
 
 
         tela.add(novo);
