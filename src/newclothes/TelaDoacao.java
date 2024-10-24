@@ -2,7 +2,6 @@ package newclothes;
 
 import javax.swing.*;
 import javax.swing.table.DefaultTableModel;
-import newclothes.*;
 import newclothes.menuDoador.variavelGlobal;
 
 import java.awt.event.ActionEvent;
@@ -51,9 +50,6 @@ public class TelaDoacao extends JFrame {
         JButton botaoFazerDoacao = new JButton("Fazer Doação");
         botaoFazerDoacao.setBounds(210, 270, 150, 30);
         add(botaoFazerDoacao);
-        botaoFazerDoacao.addActionListener(e ->{
-            
-        });
 
         // Botão para Excluir Item
         JButton botaoExcluir = new JButton("Excluir Item");
