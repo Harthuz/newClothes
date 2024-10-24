@@ -13,6 +13,11 @@ public class menuDoador extends JFrame {
     conexao con_cliente;
     components components;
 
+    public class variavelGlobal {
+        // Variável global estática
+        public static int idDoador = 23;
+    }
+
     public menuDoador(){
         // Instanciando classe components
         components = new components();
@@ -50,7 +55,7 @@ public class menuDoador extends JFrame {
                     JOptionPane.showMessageDialog(null, "\n Erro na gravação de nova doação: \n" +erro, "Mensagem do Programa", JOptionPane.INFORMATION_MESSAGE);
                 }
 
-                new fazerDoacao();
+                new TelaDoacao();
                 dispose();
             }
         });
