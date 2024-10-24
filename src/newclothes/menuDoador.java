@@ -57,6 +57,10 @@ public class menuDoador extends JFrame {
         // Botão Doações
         JButton doacoesButton = components.criarBotao("Doações","<b>","#8C3A1C","Arial",Font.PLAIN,16,Color.WHITE,20,120,150,30);
         add(doacoesButton);
+        doacoesButton.addActionListener(e ->{
+            new listarDoacao();
+            dispose();
+        });
 
 
         // Tornar a janela visível

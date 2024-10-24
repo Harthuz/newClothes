@@ -77,6 +77,7 @@ public class listarDoacao {
 
         // Definir a visibilidade do JFrame
         frame.setVisible(true);
+        frame.setLocationRelativeTo(null);
     }
     public static void main(String[] args) {
         new listarDoacao();
