@@ -51,6 +51,7 @@ public class menuDoador extends JFrame {
                 }
 
                 new fazerDoacao();
+                dispose();
             }
         });
 

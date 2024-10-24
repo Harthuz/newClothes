@@ -63,9 +63,14 @@ public class fazerDoacao extends JFrame {
         // Adicionando o JScrollPane à janela principal
         add(scrollPane);
 
-        // Botão Fazer Doação
+        // Botão adicionar doacao
         JButton adicionarDoacaoButton = components.criarBotao("+", "<b>", "#8C3A1C", "Arial", Font.BOLD, 30, Color.WHITE, 20, 319, 518, 40);
         add(adicionarDoacaoButton);
+        adicionarDoacaoButton.addActionListener(e -> {
+            adicionarItem dialog = new adicionarItem(this);
+
+
+        });
 
         // Criar o JLabel para a data de envio
         JLabel dataEnvioLabel = new JLabel("Data de Envio: ");
@@ -102,6 +107,27 @@ public class fazerDoacao extends JFrame {
         }
         return formatter;
     }
+
+    void atualizarTabela() {
+        // Obter o ID da última doação novamente
+        int idDoacao = doacaoDAO.getLastDonationId();
+        
+        // Buscar os novos dados da tabela
+        ArrayList<Object[]> listaDados = itemDoacaoDAO.fetchDonationItems(idDoacao);
+        Object[][] dados = listaDados.toArray(new Object[0][]);
+        
+        // Atualizar a tabela existente
+        JPanel tabelaPanel = components.criarTabelaPanel(dados, new int[]{50, 150, 100, 100, 50, 50});
+        
+        // Remover o JScrollPane atual e adicionar um novo com os dados atualizados
+        remove(0); // Remove o JScrollPane da tabela anterior
+        JScrollPane scrollPane = new JScrollPane(tabelaPanel);
+        scrollPane.setBounds(20, 70, 518, 250); // Redefinindo a posição e o tamanho do JScrollPane
+        add(scrollPane);
+        revalidate(); // Revalidar o layout para mostrar a nova tabela
+        repaint(); // Repaint para garantir que a nova tabela apareça
+    }
+    
 
     public static void main(String[] args) {
         new fazerDoacao();
