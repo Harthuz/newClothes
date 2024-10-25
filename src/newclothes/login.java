@@ -94,7 +94,7 @@ public class login extends JFrame {
                 try {
                     // Pegando os dados
                     char[] passwordArray = passwordField.getPassword();
-                    String password = new String(passwordArray); // Converte char[] para string
+                    String password = new String(passwordArray); // Converte char[] para String
                     String email = emailField.getText(); // Obtém o e-mail digitado
 
                     // Consulta SQL com concatenação de strings
@@ -119,17 +119,38 @@ public class login extends JFrame {
                     if (loginSuccess) {
                         JOptionPane.showMessageDialog(null, "Login efetuado com sucesso! - " + userType.toUpperCase());
 
+                        // Pegando o ID com base no tipo de usuário
+                        String idColumn = userType.equals("doador") ? "ID_doador" : "ID_ong";
+                        String query = "SELECT " + idColumn + " FROM " + userType + " WHERE email = '" + email + "'";
+                        int userId = 0;
+
+                        try {
+                            con_cliente.executaSQL(query);
+
+                            // Se posicionando no primeiro registro que aparecer
+                            if (con_cliente.resultset.first()) {
+                                userId = con_cliente.resultset.getInt(idColumn);
+                            }
+                        } catch (Exception ex) {
+                            JOptionPane.showMessageDialog(null, "Erro ao pegar ID do usuário: " + ex.getMessage());
+                        }
+
                         // Redirecionar para a página correspondente
                         switch (userType) {
+                            case "administrador":
+                                dispose();
+                                MenuAdmin menuAdmin = new MenuAdmin();
+                                menuAdmin.setVisible(true);
+                                break;
                             case "doador":
-                                // Redirecionar para a página do doador
+                                dispose();
+                                menuDoador menuDoador = new menuDoador();
+                                menuDoador.setVisible(true);
                                 break;
                             case "ong":
-                                // Redirecionar para a página da ONG
-                                break;
-                            case "administrador":
-                                // Redirecionar para a página do administrador
-                                break;
+                                dispose();
+                                menuONG menuONG = new menuONG(userId);
+                                menuONG.setVisible(true);
                         }
                     } else {
                         JOptionPane.showMessageDialog(null, "Login falhou. Verifique suas credenciais.");
@@ -140,6 +161,7 @@ public class login extends JFrame {
                 }
             }
         });
+
 
         // Botão Cadastrar Doador
         JButton registerDonorButton = new JButton("Cadastrar doador");
