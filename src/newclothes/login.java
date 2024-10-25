@@ -118,21 +118,22 @@ public class login extends JFrame {
 
                     if (loginSuccess) {
                         JOptionPane.showMessageDialog(null, "Login efetuado com sucesso! - " + userType.toUpperCase());
-
                         // Pegando o ID com base no tipo de usuário
                         String idColumn = userType.equals("doador") ? "ID_doador" : "ID_ong";
                         String query = "SELECT " + idColumn + " FROM " + userType + " WHERE email = '" + email + "'";
                         int userId = 0;
 
-                        try {
-                            con_cliente.executaSQL(query);
+                        if(!userType.equals("administrador")) {
+                            try {
+                                con_cliente.executaSQL(query);
 
-                            // Se posicionando no primeiro registro que aparecer
-                            if (con_cliente.resultset.first()) {
-                                userId = con_cliente.resultset.getInt(idColumn);
+                                // Se posicionando no primeiro registro que aparecer
+                                if (con_cliente.resultset.first()) {
+                                    userId = con_cliente.resultset.getInt(idColumn);
+                                }
+                            } catch (Exception ex) {
+                                JOptionPane.showMessageDialog(null, "Erro ao pegar ID do usuário: " + ex.getMessage());
                             }
-                        } catch (Exception ex) {
-                            JOptionPane.showMessageDialog(null, "Erro ao pegar ID do usuário: " + ex.getMessage());
                         }
 
                         // Redirecionar para a página correspondente

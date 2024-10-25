@@ -57,7 +57,7 @@ public class menuDoador extends JFrame {
         JMenuItem devItem = new JMenuItem("Desenvolvedores");
         devItem.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
-                Desenvolvedores desenvolvedores = new Desenvolvedores();
+                Desenvolvedores desenvolvedores = new Desenvolvedores(null);
                 desenvolvedores.setVisible(true);
             }
         });

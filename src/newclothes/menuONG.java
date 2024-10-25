@@ -58,7 +58,8 @@ public class menuONG extends JFrame {
         JMenuItem devItem = new JMenuItem("Desenvolvedores");
         devItem.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
-                // Levar pra página de desenvolvedores
+                Desenvolvedores desenvolvedores = new Desenvolvedores(null);
+                desenvolvedores.setVisible(true);
             }
         });
         menu.add(devItem);
@@ -67,7 +68,9 @@ public class menuONG extends JFrame {
         JMenuItem exitItem = new JMenuItem("Sair");
         exitItem.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
-                System.exit(0);
+                login login = new login();
+                login.setVisible(true);
+                dispose();
             }
         });
         menu.add(exitItem);

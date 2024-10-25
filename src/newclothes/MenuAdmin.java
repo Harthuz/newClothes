@@ -43,6 +43,7 @@ public class MenuAdmin extends javax.swing.JFrame {
         jMenu1 = new javax.swing.JMenu();
         jMenuItem3 = new javax.swing.JMenuItem();
         jMenu2 = new javax.swing.JMenu();
+        jMenuItem5 = new javax.swing.JMenuItem();
         jMenu5 = new javax.swing.JMenu();
         jMenuItem4 = new javax.swing.JMenuItem();
 
@@ -106,6 +107,11 @@ public class MenuAdmin extends javax.swing.JFrame {
         jButton6.setFont(new java.awt.Font("Arial Black", 1, 12)); // NOI18N
         jButton6.setForeground(new java.awt.Color(255, 255, 255));
         jButton6.setText("DOAÇÕES");
+        jButton6.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton6ActionPerformed(evt);
+            }
+        });
 
         jLabel8.setIcon(new javax.swing.ImageIcon(getClass().getResource("/newclothes/newclothesicon.png"))); // NOI18N
 
@@ -160,6 +166,15 @@ public class MenuAdmin extends javax.swing.JFrame {
 
         jMenu2.setText("Doações");
         jMenu2.setMargin(new java.awt.Insets(0, 20, 0, 2));
+
+        jMenuItem5.setText("Doações");
+        jMenuItem5.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jMenuItem5ActionPerformed(evt);
+            }
+        });
+        jMenu2.add(jMenuItem5);
+
         jMenuBar2.add(jMenu2);
 
         jMenu5.setText("Ong's");
@@ -246,9 +261,8 @@ public class MenuAdmin extends javax.swing.JFrame {
 
     private void jMenuItem1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem1ActionPerformed
         // TODO add your handling code here:
-        Desenvolvedores Desenvolvedores = new Desenvolvedores();
+        Desenvolvedores Desenvolvedores = new Desenvolvedores(null);
         Desenvolvedores.setVisible(true);
-        dispose();
     }//GEN-LAST:event_jMenuItem1ActionPerformed
 
     private void jMenuItem2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem2ActionPerformed
@@ -291,6 +305,15 @@ CrudOngns crudDialog = new CrudOngns();
         dispose();
     }//GEN-LAST:event_jMenuItem4ActionPerformed
 
+    private void jButton6ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton6ActionPerformed
+        doacoesADM doacoesADM = new doacoesADM(); 
+        doacoesADM.setVisible(true);
+        dispose();
+    }//GEN-LAST:event_jButton6ActionPerformed
+
+    private void jMenuItem5ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem5ActionPerformed
+    }//GEN-LAST:event_jMenuItem5ActionPerformed
+
     /**
      * @param args the command line arguments
      */
@@ -322,6 +345,7 @@ CrudOngns crudDialog = new CrudOngns();
     private javax.swing.JMenuItem jMenuItem2;
     private javax.swing.JMenuItem jMenuItem3;
     private javax.swing.JMenuItem jMenuItem4;
+    private javax.swing.JMenuItem jMenuItem5;
     private javax.swing.JPanel jPanel1;
     // End of variables declaration//GEN-END:variables
 }
