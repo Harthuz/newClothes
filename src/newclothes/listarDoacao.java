@@ -9,7 +9,7 @@ import java.sql.*;
 
 public class listarDoacao {
     components components;
-    public listarDoacao(){
+    public listarDoacao(int id){
         components = new components();
 
         // Criar o JFrame
@@ -53,7 +53,7 @@ public class listarDoacao {
             Statement statement = connection.createStatement();
 
             // Executar a consulta SQL
-            ResultSet resultSet = statement.executeQuery("SELECT * FROM doacao");
+            ResultSet resultSet = statement.executeQuery("SELECT * FROM doacao WHERE ID_doador = '" + id + "'");
 
             // Preencher a tabela com os dados retornados
             while (resultSet.next()) {
@@ -78,8 +78,5 @@ public class listarDoacao {
         // Definir a visibilidade do JFrame
         frame.setVisible(true);
         frame.setLocationRelativeTo(null);
-    }
-    public static void main(String[] args) {
-        new listarDoacao();
     }
 }

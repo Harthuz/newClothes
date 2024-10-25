@@ -14,19 +14,15 @@ public class menuDoador extends JFrame {
     conexao con_cliente;
     components components;
 
-    public static class variavelGlobal {
-        // Variável global estática
-        public static int idDoador = 25;
-    }
 
-    public menuDoador(){
+    public menuDoador(int id){
         // Instanciando classe components
         components = new components();
 
         con_cliente = new conexao();
         con_cliente.conecta();
 
-        int idDoadorMenuDoador = variavelGlobal.idDoador;
+        int idDoadorMenuDoador = id;
 
         // Configuração da janela
         setTitle("Menu Doador");
@@ -60,7 +56,7 @@ public class menuDoador extends JFrame {
 
                         if (ResultSetsqlUltimaDoacao.next()) {
                             int idUltimaDoacao = ResultSetsqlUltimaDoacao.getInt("ID_doacao");
-                            SwingUtilities.invokeLater(() -> new telaDoacao(idUltimaDoacao).setVisible(true));           
+                            SwingUtilities.invokeLater(() -> new telaDoacao(idUltimaDoacao, idDoadorMenuDoador).setVisible(true));
                             dispose();
                             System.out.println("Doação criada com sucesso!");
                         } else {
@@ -85,7 +81,7 @@ public class menuDoador extends JFrame {
         JButton doacoesButton = components.criarBotao("Doações","<b>","#8C3A1C","Arial",Font.PLAIN,16,Color.WHITE,20,120,150,30);
         add(doacoesButton);
         doacoesButton.addActionListener(e ->{
-            new listarDoacao();
+            new listarDoacao(idDoadorMenuDoador);
             dispose();
         });
 
@@ -103,6 +99,6 @@ public class menuDoador extends JFrame {
     }
 
     public static void main(String[] args) {
-        new menuDoador();
+        new menuDoador(1);
     }
 }

@@ -3,9 +3,6 @@ package newclothes;
 import javax.swing.*;
 import javax.swing.table.DefaultTableModel;
 
-import com.mysql.cj.jdbc.exceptions.SQLExceptionsMapping;
-import com.mysql.cj.protocol.Resultset;
-
 import components.components;
 import conexao.conexao;
 
@@ -32,7 +29,7 @@ public class telaDoacao extends JFrame {
     conexao con_cliente;
 
 
-    public telaDoacao(int idDoacao) {
+    public telaDoacao(int idDoacao, int idDoador) {
 
         setTitle("Tela de Doação");
         setSize(750, 400);
@@ -236,7 +233,7 @@ public class telaDoacao extends JFrame {
                                         int rowsAffectedsqlAtualizaDoacao = con_cliente.statement.executeUpdate(sqlAtualizaDoacao);
                                         if(rowsAffectedsqlAtualizaDoacao>0){
                                             JOptionPane.showMessageDialog(null, "Sua doação foi feita com sucesso", "Doação Feita", JOptionPane.INFORMATION_MESSAGE);
-                                            new menuDoador();
+                                            new menuDoador(idDoador);
                                             dispose();
                                         }
                                         else{
@@ -506,10 +503,6 @@ public class telaDoacao extends JFrame {
         }
 
         return tamanhos.toArray(new String[0]); // Retorna o array de tamanhos
-    }
-
-    public static void main(String[] args) {
-        SwingUtilities.invokeLater(() -> new telaDoacao(0).setVisible(true));
     }
 
     // Classe ModeloTabelaNaoEditavel
