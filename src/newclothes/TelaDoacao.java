@@ -3,6 +3,7 @@ package newclothes;
 import javax.swing.*;
 import javax.swing.table.DefaultTableModel;
 
+import com.mysql.cj.jdbc.exceptions.SQLExceptionsMapping;
 import com.mysql.cj.protocol.Resultset;
 
 import components.components;
@@ -20,6 +21,7 @@ import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.awt.*;
+import java.time.format.DateTimeFormatter;
 
 public class telaDoacao extends JFrame {
     private JTable tabela;
@@ -190,18 +192,64 @@ public class telaDoacao extends JFrame {
                 ResultSet resultSetsqlVerificaItensTabela = con_cliente.statement.executeQuery(sqlVerificaItensTabela);
 
                 if(resultSetsqlVerificaItensTabela.next()){
-                    String ongSelecionada = (String) comboOng.getSelectedItem();
-                    System.out.println(ongSelecionada);
-                    LocalDate dataAtual = getDataAtual();
-                    String sqlAtualizaDoacao = "UPDATE doacao SET dataDoacao = '2024-02-30', ID_ong = (SELECT ID_ong FROM ong WHERE nome like '"+ongSelecionada+"') WHERE ID_doacao ="+idDoacao;
-                    int rowsAffectedsqlAtualizaDoacao = con_cliente.statement.executeUpdate(sqlAtualizaDoacao);
-                    if(rowsAffectedsqlAtualizaDoacao>0){
-                        JOptionPane.showMessageDialog(null, "Sua doação foi feita com sucesso", "Doação Feita", JOptionPane.INFORMATION_MESSAGE);
-                        new menuDoador();
-                        dispose();
-                    }
-                    else{
-                        JOptionPane.showMessageDialog(null, "Erro ao fazer nova doação: Update não enviado", "Erro", JOptionPane.ERROR_MESSAGE);
+                    try {
+                        int campoDiaint = Integer.parseInt(campoDia.getText());
+                        int campoMesint = Integer.parseInt(campoMes.getText());
+                        int campoAnoint = Integer.parseInt(campoAno.getText());
+        
+                        if (campoDiaint < 1 || campoDiaint > 31 || campoMesint < 1 || campoMesint > 12 || campoAnoint < 1000 || campoAnoint > 9999) {
+                            // Condição para datas inválidas em geral
+                            JOptionPane.showMessageDialog(null, "Data inválida.");
+                        } else {
+                            // Verificações adicionais para meses com menos de 31 dias
+                            if ((campoMesint == 4 || campoMesint == 6 || campoMesint == 9 || campoMesint == 11) && campoDiaint > 30) {
+                                JOptionPane.showMessageDialog(null, "Esse mês tem apenas 30 dias.");
+                            } else if (campoMesint == 2) {
+                                // Verificar ano bissexto para fevereiro
+                                boolean anoBissexto = (campoAnoint % 4 == 0 && (campoAnoint % 100 != 0 || campoAnoint % 400 == 0));
+                                if (anoBissexto && campoDiaint > 29) {
+                                    JOptionPane.showMessageDialog(null, "Fevereiro em ano bissexto tem apenas 29 dias.");
+                                } else if (!anoBissexto && campoDiaint > 28) {
+                                    JOptionPane.showMessageDialog(null, "Fevereiro tem apenas 28 dias.");
+                                }
+                            }
+                            else{
+                                try {
+                                    String ongSelecionada = (String) comboOng.getSelectedItem();
+                                    System.out.println(ongSelecionada);
+
+
+                                    String dataInput = campoAnoint+"-"+campoMesint+"-"+campoDiaint;
+
+                                    // Formatar o input da data e a data de hoje
+                                    DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-M-d");
+                                    LocalDate dataInputDate = LocalDate.parse(dataInput, formatter);
+                                    LocalDate dataHoje = LocalDate.now();
+
+
+                                    // Comparar as datas
+                                    if (dataInputDate.isBefore(dataHoje)) {
+                                        JOptionPane.showMessageDialog(null, "A data da doação não pode ser anterior a hoje", "Erro", JOptionPane.ERROR_MESSAGE);
+                                    } 
+                                    else{
+                                        String sqlAtualizaDoacao = "UPDATE doacao SET dataDoacao = '"+dataInput+"', ID_ong = (SELECT ID_ong FROM ong WHERE nome like '"+ongSelecionada+"') WHERE ID_doacao ="+idDoacao;
+                                        int rowsAffectedsqlAtualizaDoacao = con_cliente.statement.executeUpdate(sqlAtualizaDoacao);
+                                        if(rowsAffectedsqlAtualizaDoacao>0){
+                                            JOptionPane.showMessageDialog(null, "Sua doação foi feita com sucesso", "Doação Feita", JOptionPane.INFORMATION_MESSAGE);
+                                            new menuDoador();
+                                            dispose();
+                                        }
+                                        else{
+                                            JOptionPane.showMessageDialog(null, "Erro ao fazer nova doação: Update não enviado", "Erro", JOptionPane.ERROR_MESSAGE);
+                                        }
+                                    }
+                                } catch (SQLException exp) {
+                                    JOptionPane.showMessageDialog(null, "Erro ao fazer nova doação: "+exp, "Erro", JOptionPane.ERROR_MESSAGE);
+                                }                                
+                            }
+                        }
+                    } catch (Exception exp) {
+                        JOptionPane.showMessageDialog(null, "Campo data não pode ser vazio", "Erro", JOptionPane.ERROR_MESSAGE);
                     }
                 }
                 else{
@@ -210,7 +258,7 @@ public class telaDoacao extends JFrame {
 
                 
             } catch (SQLException exp) {
-                JOptionPane.showMessageDialog(null, "Erro ao fazer nova doação: "+exp, "Erro", JOptionPane.ERROR_MESSAGE);
+                JOptionPane.showMessageDialog(null, "Erro ao verificar itens da tabela: "+exp, "Erro", JOptionPane.ERROR_MESSAGE);
             }
         });
 
