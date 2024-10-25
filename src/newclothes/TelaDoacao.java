@@ -2,16 +2,15 @@ package newclothes;
 
 import javax.swing.*;
 import javax.swing.table.DefaultTableModel;
-import newclothes.menuDoador.variavelGlobal;
+
+import conexao.conexao;
 
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
-import java.sql.Connection;
-import java.sql.DriverManager;
 import java.sql.ResultSet;
-import java.sql.Statement;
+import java.sql.SQLException;
 import java.util.ArrayList;
 
 public class TelaDoacao extends JFrame {
@@ -20,24 +19,33 @@ public class TelaDoacao extends JFrame {
     private JTextField campoDia;
     private JTextField campoMes;
     private JTextField campoAno;
+    public static int idDoacao;
+    conexao con_cliente;
 
-    public TelaDoacao() {
+
+    public TelaDoacao(int idDoacao) {
+
         setTitle("Tela de Doação");
         setSize(750, 400);
         setDefaultCloseOperation(EXIT_ON_CLOSE);
         setLocationRelativeTo(null);
         setLayout(null);
 
-        int idDoador = variavelGlobal.idDoador;
-        System.out.println("ID do Doador: " + idDoador);
+        String idDoacaoTelaDoacaoString = String.valueOf(idDoacao); // Usando String.valueOf()
 
-        JLabel labelDoacao = new JLabel("Sua doação contém os itens:");
+        con_cliente = new conexao();
+        con_cliente.conecta();
+
+        JLabel labelDoacao = new JLabel(idDoacaoTelaDoacaoString);
         labelDoacao.setBounds(20, 20, 250, 25);
         add(labelDoacao);
 
         // Modelo da tabela
-        modeloTabela = new ModeloTabelaNaoEditavel(new String[]{"Item", "Tamanho", "Quantidade"}, 0);
+        modeloTabela = new ModeloTabelaNaoEditavel(new String[]{"ID","Item", "Tamanho", "Quantidade"}, 0);
         tabela = new JTable(modeloTabela);
+        tabela.getColumnModel().getColumn(0).setMinWidth(0);
+        tabela.getColumnModel().getColumn(0).setMaxWidth(0);
+        tabela.getColumnModel().getColumn(0).setWidth(0);
         JScrollPane scrollPane = new JScrollPane(tabela);
         scrollPane.setBounds(20, 50, 550, 200);
         add(scrollPane);
@@ -170,10 +178,38 @@ public class TelaDoacao extends JFrame {
                 String quantidade = campoQuantidade.getText();
                 String tipo = (String) comboTipo.getSelectedItem();
                 String tamanho = (String) comboTamanho.getSelectedItem();
-
                 if (!quantidade.isEmpty()) {
-                    modeloTabela.addRow(new Object[]{tipo, tamanho, quantidade});
-                    modal.dispose();
+                    
+                    try {
+                        String sqlAdicionaItemDoacao = "INSERT INTO itemdoacao (qtd , ID_doacao, cod, ID_tamanho) VALUES ('"+quantidade+"', "
+                        + "'"+TelaDoacao.idDoacao+"', "
+                        + "(SELECT cod FROM categoria WHERE descricao = '"+tipo+"'), "
+                        + "(SELECT ID_tamanho FROM tamanho WHERE descricao = '"+tamanho+"') )";
+                        
+                        int rowsAffectedsqlAdicionaItemDoacao = con_cliente.statement.executeUpdate(sqlAdicionaItemDoacao);
+                        
+                        if (rowsAffectedsqlAdicionaItemDoacao>0) {
+                            String sqlSelecionarUltimoItemDoacao = "SELECT ID_item FROM itemdoacao ORDER BY ID_item DESC LIMIT 1";
+                            ResultSet ResultSetsqlSelecionarUltimoItemDoacao = con_cliente.statement.executeQuery(sqlSelecionarUltimoItemDoacao);
+
+                            if(ResultSetsqlSelecionarUltimoItemDoacao.next()){
+                                int ultimoItemDoacao = ResultSetsqlSelecionarUltimoItemDoacao.getInt("ID_item");
+
+                                modeloTabela.addRow(new Object[]{ultimoItemDoacao,tipo, tamanho, quantidade});
+                                modal.dispose();
+                            }
+                            else{
+                                JOptionPane.showMessageDialog(null, "Erro ao consultar último itemdoacao", "Erro", JOptionPane.ERROR_MESSAGE);
+                            }
+                        } else {
+                            
+                        }
+                    } catch (SQLException exp) {
+                        JOptionPane.showMessageDialog(null, "Erro ao criar novo item doação: "+exp, "Erro", JOptionPane.ERROR_MESSAGE);
+
+                    }
+
+
                 } else {
                     JOptionPane.showMessageDialog(modal, "Por favor, insira uma quantidade.");
                 }
@@ -188,15 +224,10 @@ public class TelaDoacao extends JFrame {
     // Método para buscar tipos do banco de dados
     private String[] getTiposDoBanco() {
         ArrayList<String> tipos = new ArrayList<>();
-        String url = "jdbc:mysql://localhost/bdnewclothes"; // URL do seu banco de dados
-        String usuario = "root"; // Usuário do banco de dados
-        String senha = ""; // Senha do banco de dados
 
-        try (Connection connection = DriverManager.getConnection(url, usuario, senha);
-             Statement statement = connection.createStatement()) {
-
+        try{
             String query = "SELECT descricao FROM categoria"; // Consulta SQL
-            ResultSet resultSet = statement.executeQuery(query);
+            ResultSet resultSet = con_cliente.statement.executeQuery(query);
 
             while (resultSet.next()) {
                 tipos.add(resultSet.getString("descricao")); // Adiciona a descrição à lista
@@ -211,11 +242,39 @@ public class TelaDoacao extends JFrame {
     private void excluirItem() {
         int selectedRow = tabela.getSelectedRow();
         if (selectedRow != -1) {
-            modeloTabela.removeRow(selectedRow);
+            // Mensagem de confirmação
+            int confirm = JOptionPane.showConfirmDialog(this, 
+                    "Você deseja excluir esse item?", 
+                    "Confirmação de Exclusão", 
+                    JOptionPane.YES_NO_OPTION,
+                    JOptionPane.QUESTION_MESSAGE);
+    
+            // Verifica se o usuário clicou em "Sim"
+            if (confirm == JOptionPane.YES_OPTION) {
+                // Acessar o valor da coluna ID na linha selecionada
+                int idItemSelecionado = (int) modeloTabela.getValueAt(selectedRow, 0); // Supondo que a coluna ID seja a primeira (índice 0)
+                
+                try {
+                    String sqlDeletarItemDoacao = "DELETE FROM itemdoacao WHERE ID_item = "+idItemSelecionado;
+                    int rowsAffectedsqlDeletarItemDoacao = con_cliente.statement.executeUpdate(sqlDeletarItemDoacao);
+
+                    if(rowsAffectedsqlDeletarItemDoacao>0){
+                        // Remover a linha do modelo da tabela
+                        modeloTabela.removeRow(selectedRow);
+                    }
+                    else{
+                        JOptionPane.showMessageDialog(null, "Erro ao excluir itemdoacao: Exclusão não realizada", "Erro", JOptionPane.ERROR_MESSAGE);
+                    }
+                } catch (SQLException exp) {
+                    JOptionPane.showMessageDialog(null, "Erro ao excluir itemdoacao: "+exp, "Erro", JOptionPane.ERROR_MESSAGE);
+                }
+                
+            }
         } else {
             JOptionPane.showMessageDialog(this, "Selecione um item para excluir.");
         }
     }
+    
 
     private void alterarItem() {
         int selectedRow = tabela.getSelectedRow();
@@ -289,15 +348,10 @@ public class TelaDoacao extends JFrame {
     // Método para buscar ONGs do banco de dados
     private String[] getOngsDoBanco() {
         ArrayList<String> ongs = new ArrayList<>();
-        String url = "jdbc:mysql://localhost/bdnewclothes"; // URL do seu banco de dados
-        String usuario = "root"; // Usuário do banco de dados
-        String senha = ""; // Senha do banco de dados
 
-        try (Connection connection = DriverManager.getConnection(url, usuario, senha);
-             Statement statement = connection.createStatement()) {
-
+        try{
             String query = "SELECT nome FROM ong"; // Consulta SQL
-            ResultSet resultSet = statement.executeQuery(query);
+            ResultSet resultSet = con_cliente.statement.executeQuery(query);
 
             while (resultSet.next()) {
                 ongs.add(resultSet.getString("nome")); // Adiciona o nome da ONG à lista
@@ -312,15 +366,10 @@ public class TelaDoacao extends JFrame {
     // Método para buscar tamanhos do banco de dados
     private String[] getTamanhosDoBanco() {
         ArrayList<String> tamanhos = new ArrayList<>();
-        String url = "jdbc:mysql://localhost/bdnewclothes"; // URL do seu banco de dados
-        String usuario = "root"; // Usuário do banco de dados
-        String senha = ""; // Senha do banco de dados
 
-        try (Connection connection = DriverManager.getConnection(url, usuario, senha);
-             Statement statement = connection.createStatement()) {
-
+        try {
             String query = "SELECT descricao FROM tamanho"; // Consulta SQL
-            ResultSet resultSet = statement.executeQuery(query);
+            ResultSet resultSet = con_cliente.statement.executeQuery(query);
 
             while (resultSet.next()) {
                 tamanhos.add(resultSet.getString("descricao")); // Adiciona a descrição à lista
@@ -333,7 +382,7 @@ public class TelaDoacao extends JFrame {
     }
 
     public static void main(String[] args) {
-        SwingUtilities.invokeLater(() -> new TelaDoacao().setVisible(true));
+        SwingUtilities.invokeLater(() -> new TelaDoacao(0).setVisible(true));
     }
 
     // Classe ModeloTabelaNaoEditavel

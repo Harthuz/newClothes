@@ -8,8 +8,8 @@ import java.awt.Font;
 import java.sql.*;
 
 public class listarDoacao {
+    components components;
     public listarDoacao(){
-        components components;
         components = new components();
 
         // Criar o JFrame

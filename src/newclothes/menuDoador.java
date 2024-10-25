@@ -3,19 +3,22 @@ package newclothes;
 import conexao.conexao;
 import components.components;
 import javax.swing.*;
-import java.util.Date;
 import java.awt.*;
 import java.awt.event.*;
-import java.sql.PreparedStatement;
+import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.time.LocalDate;
+import java.time.LocalDateTime;
+
+
 
 public class menuDoador extends JFrame {
     conexao con_cliente;
     components components;
 
-    public class variavelGlobal {
+    public static class variavelGlobal {
         // Variável global estática
-        public static int idDoador = 23;
+        public static int idDoador = 25;
     }
 
     public menuDoador(){
@@ -24,6 +27,8 @@ public class menuDoador extends JFrame {
 
         con_cliente = new conexao();
         con_cliente.conecta();
+
+        int idDoadorMenuDoador = variavelGlobal.idDoador;
 
         // Configuração da janela
         setTitle("Menu Doador");
@@ -42,9 +47,33 @@ public class menuDoador extends JFrame {
         // Adiciona ActionListener ao botão
         novaDoacaoButton.addActionListener(new ActionListener() {
             @Override
-            public void actionPerformed(ActionEvent e) {                
-                new TelaDoacao();
-                dispose();
+            public void actionPerformed(ActionEvent e) {
+                LocalDate dataAtual = getDataAtual();
+
+                try {
+                    String sqlCriarDoacao = "INSERT INTO doacao (dataDoacao, ID_doador, ID_ong) VALUES ('"+dataAtual+"','"+idDoadorMenuDoador+"','"+1+"')";
+                    int rowsAffectedsqlCriarDoacao = con_cliente.statement.executeUpdate(sqlCriarDoacao);
+
+                    // Verifica se a inserção foi bem-sucedida
+                    if (rowsAffectedsqlCriarDoacao > 0) {
+
+                        String sqlUltimaDoacao = "SELECT ID_doacao FROM doacao ORDER BY dataDoacao DESC, ID_doacao DESC LIMIT 1";
+                        ResultSet ResultSetsqlUltimaDoacao = con_cliente.statement.executeQuery(sqlUltimaDoacao);
+
+                        if (ResultSetsqlUltimaDoacao.next()) {
+                            int idUltimaDoacao = ResultSetsqlUltimaDoacao.getInt("ID_doacao");
+                            SwingUtilities.invokeLater(() -> new TelaDoacao(idUltimaDoacao).setVisible(true));           
+                            dispose();
+                            System.out.println("Doação criada com sucesso!");
+                        } else {
+                            
+                        }
+                    } else {
+                        JOptionPane.showMessageDialog(null, "Falha ao criar a doação. Nenhuma linha afetada.", "Erro", JOptionPane.ERROR_MESSAGE);
+                    }
+                } catch (SQLException exp) {
+                    JOptionPane.showMessageDialog(null, "Erro ao criar nova doação: "+exp, "Erro", JOptionPane.ERROR_MESSAGE);
+                }
             }
         });
 
@@ -67,6 +96,12 @@ public class menuDoador extends JFrame {
         setVisible(true);
         setLocationRelativeTo(null);
         setSize(420,450);
+    }
+
+    // Função que retorna apenas a data atual
+    public static LocalDate getDataAtual() {
+        LocalDateTime agora = LocalDateTime.now(); // Obtém a data e hora atuais
+        return agora.toLocalDate(); // Extrai apenas a data
     }
 
     public static void main(String[] args) {
