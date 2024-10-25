@@ -7,7 +7,7 @@ import java.awt.event.MouseEvent; // Certifique-se de que este é o correto
 
 
 public class components extends JFrame{
-        public JLabel criarLabel(String texto, String tagHtml, String fonte, int tamanho, int estilo, int x, int y, int largura, int altura) {
+        public static JLabel criarLabel(String texto, String tagHtml, String fonte, int tamanho, int estilo, int x, int y, int largura, int altura) {
         // Adiciona a tag HTML ao texto
         String textoFormatado = "<html>" + tagHtml + texto + tagHtml.replace("<", "</") + "</html>";
         

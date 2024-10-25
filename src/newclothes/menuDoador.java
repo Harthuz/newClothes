@@ -10,8 +10,6 @@ import java.sql.SQLException;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 
-
-
 public class menuDoador extends JFrame {
     conexao con_cliente;
     components components;
@@ -62,7 +60,7 @@ public class menuDoador extends JFrame {
 
                         if (ResultSetsqlUltimaDoacao.next()) {
                             int idUltimaDoacao = ResultSetsqlUltimaDoacao.getInt("ID_doacao");
-                            SwingUtilities.invokeLater(() -> new TelaDoacao(idUltimaDoacao).setVisible(true));           
+                            SwingUtilities.invokeLater(() -> new telaDoacao(idUltimaDoacao).setVisible(true));           
                             dispose();
                             System.out.println("Doação criada com sucesso!");
                         } else {

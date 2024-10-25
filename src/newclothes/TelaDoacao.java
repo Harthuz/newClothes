@@ -3,27 +3,34 @@ package newclothes;
 import javax.swing.*;
 import javax.swing.table.DefaultTableModel;
 
+import com.mysql.cj.protocol.Resultset;
+
+import components.components;
 import conexao.conexao;
 
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
+import java.awt.event.WindowAdapter;
+import java.awt.event.WindowEvent;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
+import java.awt.*;
 
-public class TelaDoacao extends JFrame {
+public class telaDoacao extends JFrame {
     private JTable tabela;
     private ModeloTabelaNaoEditavel modeloTabela;
     private JTextField campoDia;
     private JTextField campoMes;
     private JTextField campoAno;
-    public static int idDoacao;
     conexao con_cliente;
 
 
-    public TelaDoacao(int idDoacao) {
+    public telaDoacao(int idDoacao) {
 
         setTitle("Tela de Doação");
         setSize(750, 400);
@@ -31,14 +38,37 @@ public class TelaDoacao extends JFrame {
         setLocationRelativeTo(null);
         setLayout(null);
 
-        String idDoacaoTelaDoacaoString = String.valueOf(idDoacao); // Usando String.valueOf()
+        System.out.println(idDoacao);
 
         con_cliente = new conexao();
         con_cliente.conecta();
 
-        JLabel labelDoacao = new JLabel(idDoacaoTelaDoacaoString);
-        labelDoacao.setBounds(20, 20, 250, 25);
-        add(labelDoacao);
+        addWindowListener(new WindowAdapter() {
+            public void windowClosing(WindowEvent e) {
+                try {
+                    String sqlDeletaItemDoacao = "DELETE FROM itemdoacao WHERE ID_doacao = "+idDoacao;
+                    int rowsAffectedsqlDeletaItemDoacao = con_cliente.statement.executeUpdate(sqlDeletaItemDoacao);
+
+                    if (rowsAffectedsqlDeletaItemDoacao>0) {
+                        System.out.println("itemdoacao referentes a doação ID:"+idDoacao+" excluidos");
+                    }
+
+                    String sqlDeletaDoacao = "DELETE FROM doacao WHERE ID_doacao = "+idDoacao;
+                    int rowsAffectedsqlDeletaDoacao = con_cliente.statement.executeUpdate(sqlDeletaDoacao);
+
+                    if (rowsAffectedsqlDeletaDoacao>0) {
+                        System.out.println("Doação excluida");
+                    }
+                } catch (SQLException exp) {
+                    JOptionPane.showMessageDialog(null, "Erro ao excluir doação: Fechar janela"+exp, "Erro", JOptionPane.ERROR_MESSAGE);
+                }
+            }
+        });
+        
+
+        // Label TITULO
+        JLabel fazerDoacaoLabel = components.criarLabel("SUA DOAÇÃO CONTÉM OS ITENS:", "<u>", "Arial", 14, Font.BOLD, 20, 20, 400, 25);
+        add(fazerDoacaoLabel);
 
         // Modelo da tabela
         modeloTabela = new ModeloTabelaNaoEditavel(new String[]{"ID","Item", "Tamanho", "Quantidade"}, 0);
@@ -52,12 +82,137 @@ public class TelaDoacao extends JFrame {
 
         JButton botaoAdicionar = new JButton("Adicionar Novo Item");
         botaoAdicionar.setBounds(20, 270, 180, 30);
-        botaoAdicionar.addActionListener(e -> abrirModalAdicionarItem());
         add(botaoAdicionar);
+        botaoAdicionar.addActionListener(e -> {
+
+            JDialog modal = new JDialog(this, "Adicionar Item", true);
+            modal.setSize(300, 250);
+            modal.setLayout(null);
+
+            JLabel labelQuantidade = new JLabel("Quantidade do Item:");
+            labelQuantidade.setBounds(20, 20, 150, 25);
+            modal.add(labelQuantidade);
+
+            JTextField campoQuantidade = new JTextField();
+            campoQuantidade.setBounds(160, 20, 100, 25);
+            campoQuantidade.addKeyListener(new KeyAdapter() {
+                public void keyTyped(KeyEvent e) {
+                    if (!Character.isDigit(e.getKeyChar())) {
+                        e.consume();
+                    }
+                }
+            });
+            modal.add(campoQuantidade);
+
+            JLabel labelTipo = new JLabel("Tipo do Item:");
+            labelTipo.setBounds(20, 60, 150, 25);
+            modal.add(labelTipo);
+
+            JComboBox<String> comboTipo = new JComboBox<>(getTiposDoBanco());
+            comboTipo.setBounds(160, 60, 100, 25);
+            modal.add(comboTipo);
+
+            JLabel labelTamanho = new JLabel("Tamanho:");
+            labelTamanho.setBounds(20, 100, 150, 25);
+            modal.add(labelTamanho);
+
+            JComboBox<String> comboTamanho = new JComboBox<>(getTamanhosDoBanco());
+            comboTamanho.setBounds(160, 100, 100, 25);
+            modal.add(comboTamanho);
+
+            JButton botaoAdicionarItem = new JButton("Adicionar");
+            botaoAdicionarItem.setBounds(100, 140, 100, 30);
+            add(botaoAdicionar);
+            botaoAdicionarItem.addActionListener(new ActionListener() {
+                public void actionPerformed(ActionEvent e) {
+                        String quantidade = campoQuantidade.getText();
+                        String tipo = (String) comboTipo.getSelectedItem();
+                        String tamanho = (String) comboTamanho.getSelectedItem();
+                        if (!quantidade.isEmpty()) {
+                            
+                            try {
+                                String sqlAdicionaItemDoacao = "INSERT INTO itemdoacao (qtd , ID_doacao, cod, ID_tamanho) VALUES ('"+quantidade+"', "
+                                + "'"+idDoacao+"', "
+                                + "(SELECT cod FROM categoria WHERE descricao = '"+tipo+"'), "
+                                + "(SELECT ID_tamanho FROM tamanho WHERE descricao = '"+tamanho+"') )";
+                                
+                                int rowsAffectedsqlAdicionaItemDoacao = con_cliente.statement.executeUpdate(sqlAdicionaItemDoacao);
+                                
+                                if (rowsAffectedsqlAdicionaItemDoacao>0) {
+                                    String sqlSelecionarUltimoItemDoacao = "SELECT ID_item FROM itemdoacao ORDER BY ID_item DESC LIMIT 1";
+                                    ResultSet ResultSetsqlSelecionarUltimoItemDoacao = con_cliente.statement.executeQuery(sqlSelecionarUltimoItemDoacao);
+
+                                    if(ResultSetsqlSelecionarUltimoItemDoacao.next()){
+                                        int ultimoItemDoacao = ResultSetsqlSelecionarUltimoItemDoacao.getInt("ID_item");
+
+                                        modeloTabela.addRow(new Object[]{ultimoItemDoacao,tipo, tamanho, quantidade});
+                                        modal.dispose();
+                                    }
+                                    else{
+                                        JOptionPane.showMessageDialog(null, "Erro ao consultar último itemdoacao", "Erro", JOptionPane.ERROR_MESSAGE);
+                                    }
+                                } else {
+                                    
+                                }
+                            } catch (SQLException exp) {
+                                JOptionPane.showMessageDialog(null, "Erro ao criar novo item doação: "+exp, "Erro", JOptionPane.ERROR_MESSAGE);
+
+                            }
+
+
+                        } else {
+                            JOptionPane.showMessageDialog(modal, "Por favor, insira uma quantidade.");
+                        }
+                }
+            });
+                modal.add(botaoAdicionarItem);
+                modal.setLocationRelativeTo(this);
+                modal.setVisible(true);
+
+        });
+
+        
+        JLabel labelOng = new JLabel("ONG:");
+        labelOng.setBounds(400, 320, 150, 25);
+        add(labelOng);
+
+        JComboBox<String> comboOng = new JComboBox<>(getOngsDoBanco());
+        comboOng.setBounds(440, 320, 200, 25);
+        add(comboOng);
 
         JButton botaoFazerDoacao = new JButton("Fazer Doação");
         botaoFazerDoacao.setBounds(210, 270, 150, 30);
         add(botaoFazerDoacao);
+        botaoFazerDoacao.addActionListener(e->{
+
+            try {
+                String sqlVerificaItensTabela = "SELECT * FROM itemdoacao WHERE ID_doacao = "+idDoacao;
+                ResultSet resultSetsqlVerificaItensTabela = con_cliente.statement.executeQuery(sqlVerificaItensTabela);
+
+                if(resultSetsqlVerificaItensTabela.next()){
+                    String ongSelecionada = (String) comboOng.getSelectedItem();
+                    System.out.println(ongSelecionada);
+                    LocalDate dataAtual = getDataAtual();
+                    String sqlAtualizaDoacao = "UPDATE doacao SET dataDoacao = '2024-02-30', ID_ong = (SELECT ID_ong FROM ong WHERE nome like '"+ongSelecionada+"') WHERE ID_doacao ="+idDoacao;
+                    int rowsAffectedsqlAtualizaDoacao = con_cliente.statement.executeUpdate(sqlAtualizaDoacao);
+                    if(rowsAffectedsqlAtualizaDoacao>0){
+                        JOptionPane.showMessageDialog(null, "Sua doação foi feita com sucesso", "Doação Feita", JOptionPane.INFORMATION_MESSAGE);
+                        new menuDoador();
+                        dispose();
+                    }
+                    else{
+                        JOptionPane.showMessageDialog(null, "Erro ao fazer nova doação: Update não enviado", "Erro", JOptionPane.ERROR_MESSAGE);
+                    }
+                }
+                else{
+                    JOptionPane.showMessageDialog(null, "Adicione pelo menos um item na tabela antes de fazer doação", "Erro", JOptionPane.ERROR_MESSAGE);
+                }
+
+                
+            } catch (SQLException exp) {
+                JOptionPane.showMessageDialog(null, "Erro ao fazer nova doação: "+exp, "Erro", JOptionPane.ERROR_MESSAGE);
+            }
+        });
 
         // Botão para Excluir Item
         JButton botaoExcluir = new JButton("Excluir Item");
@@ -83,7 +238,6 @@ public class TelaDoacao extends JFrame {
         campoDia = new JTextField();
         campoDia.setBounds(100, 320, 40, 25);
         campoDia.addKeyListener(new KeyAdapter() {
-            @Override
             public void keyTyped(KeyEvent e) {
                 if (!Character.isDigit(e.getKeyChar()) || campoDia.getText().length() >= 2) {
                     e.consume();
@@ -99,7 +253,6 @@ public class TelaDoacao extends JFrame {
         campoMes = new JTextField();
         campoMes.setBounds(180, 320, 40, 25);
         campoMes.addKeyListener(new KeyAdapter() {
-            @Override
             public void keyTyped(KeyEvent e) {
                 if (!Character.isDigit(e.getKeyChar()) || campoMes.getText().length() >= 2) {
                     e.consume();
@@ -115,7 +268,6 @@ public class TelaDoacao extends JFrame {
         campoAno = new JTextField();
         campoAno.setBounds(260, 320, 60, 25);
         campoAno.addKeyListener(new KeyAdapter() {
-            @Override
             public void keyTyped(KeyEvent e) {
                 if (!Character.isDigit(e.getKeyChar()) || campoAno.getText().length() >= 4) {
                     e.consume();
@@ -123,102 +275,6 @@ public class TelaDoacao extends JFrame {
             }
         });
         add(campoAno);
-
-        JLabel labelOng = new JLabel("ONG:");
-        labelOng.setBounds(400, 320, 150, 25);
-        add(labelOng);
-
-        JComboBox<String> comboOng = new JComboBox<>(getOngsDoBanco());
-        comboOng.setBounds(440, 320, 200, 25);
-        add(comboOng);
-    }
-
-    private void abrirModalAdicionarItem() {
-        JDialog modal = new JDialog(this, "Adicionar Item", true);
-        modal.setSize(300, 250);
-        modal.setLayout(null);
-
-        JLabel labelQuantidade = new JLabel("Quantidade do Item:");
-        labelQuantidade.setBounds(20, 20, 150, 25);
-        modal.add(labelQuantidade);
-
-        JTextField campoQuantidade = new JTextField();
-        campoQuantidade.setBounds(160, 20, 100, 25);
-        campoQuantidade.addKeyListener(new KeyAdapter() {
-            @Override
-            public void keyTyped(KeyEvent e) {
-                if (!Character.isDigit(e.getKeyChar())) {
-                    e.consume();
-                }
-            }
-        });
-        modal.add(campoQuantidade);
-
-        JLabel labelTipo = new JLabel("Tipo do Item:");
-        labelTipo.setBounds(20, 60, 150, 25);
-        modal.add(labelTipo);
-
-        JComboBox<String> comboTipo = new JComboBox<>(getTiposDoBanco());
-        comboTipo.setBounds(160, 60, 100, 25);
-        modal.add(comboTipo);
-
-        JLabel labelTamanho = new JLabel("Tamanho:");
-        labelTamanho.setBounds(20, 100, 150, 25);
-        modal.add(labelTamanho);
-
-        JComboBox<String> comboTamanho = new JComboBox<>(getTamanhosDoBanco());
-        comboTamanho.setBounds(160, 100, 100, 25);
-        modal.add(comboTamanho);
-
-        JButton botaoAdicionarItem = new JButton("Adicionar");
-        botaoAdicionarItem.setBounds(100, 140, 100, 30);
-        botaoAdicionarItem.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                String quantidade = campoQuantidade.getText();
-                String tipo = (String) comboTipo.getSelectedItem();
-                String tamanho = (String) comboTamanho.getSelectedItem();
-                if (!quantidade.isEmpty()) {
-                    
-                    try {
-                        String sqlAdicionaItemDoacao = "INSERT INTO itemdoacao (qtd , ID_doacao, cod, ID_tamanho) VALUES ('"+quantidade+"', "
-                        + "'"+TelaDoacao.idDoacao+"', "
-                        + "(SELECT cod FROM categoria WHERE descricao = '"+tipo+"'), "
-                        + "(SELECT ID_tamanho FROM tamanho WHERE descricao = '"+tamanho+"') )";
-                        
-                        int rowsAffectedsqlAdicionaItemDoacao = con_cliente.statement.executeUpdate(sqlAdicionaItemDoacao);
-                        
-                        if (rowsAffectedsqlAdicionaItemDoacao>0) {
-                            String sqlSelecionarUltimoItemDoacao = "SELECT ID_item FROM itemdoacao ORDER BY ID_item DESC LIMIT 1";
-                            ResultSet ResultSetsqlSelecionarUltimoItemDoacao = con_cliente.statement.executeQuery(sqlSelecionarUltimoItemDoacao);
-
-                            if(ResultSetsqlSelecionarUltimoItemDoacao.next()){
-                                int ultimoItemDoacao = ResultSetsqlSelecionarUltimoItemDoacao.getInt("ID_item");
-
-                                modeloTabela.addRow(new Object[]{ultimoItemDoacao,tipo, tamanho, quantidade});
-                                modal.dispose();
-                            }
-                            else{
-                                JOptionPane.showMessageDialog(null, "Erro ao consultar último itemdoacao", "Erro", JOptionPane.ERROR_MESSAGE);
-                            }
-                        } else {
-                            
-                        }
-                    } catch (SQLException exp) {
-                        JOptionPane.showMessageDialog(null, "Erro ao criar novo item doação: "+exp, "Erro", JOptionPane.ERROR_MESSAGE);
-
-                    }
-
-
-                } else {
-                    JOptionPane.showMessageDialog(modal, "Por favor, insira uma quantidade.");
-                }
-            }
-        });
-        modal.add(botaoAdicionarItem);
-
-        modal.setLocationRelativeTo(this);
-        modal.setVisible(true);
     }
 
     // Método para buscar tipos do banco de dados
@@ -237,6 +293,12 @@ public class TelaDoacao extends JFrame {
         }
 
         return tipos.toArray(new String[0]); // Retorna o array de tipos
+    }
+
+    // Função que retorna apenas a data atual
+    public static LocalDate getDataAtual() {
+        LocalDateTime agora = LocalDateTime.now(); // Obtém a data e hora atuais
+        return agora.toLocalDate(); // Extrai apenas a data
     }
 
     private void excluirItem() {
@@ -280,9 +342,10 @@ public class TelaDoacao extends JFrame {
         int selectedRow = tabela.getSelectedRow();
         if (selectedRow != -1) {
             // Recuperar os dados da linha selecionada
-            String tipo = (String) modeloTabela.getValueAt(selectedRow, 0);
-            String tamanho = (String) modeloTabela.getValueAt(selectedRow, 1);
-            String quantidade = (String) modeloTabela.getValueAt(selectedRow, 2);
+            int idItemDoacao = (int) modeloTabela.getValueAt(selectedRow, 0);
+            String tipo = (String) modeloTabela.getValueAt(selectedRow, 1);
+            String tamanho = (String) modeloTabela.getValueAt(selectedRow, 2);
+            String quantidade = (String) modeloTabela.getValueAt(selectedRow, 3);
     
             // Abrir modal para alterar o item
             JDialog modal = new JDialog(this, "Alterar Item", true);
@@ -318,17 +381,33 @@ public class TelaDoacao extends JFrame {
             JButton botaoAlterarItem = new JButton("Alterar");
             botaoAlterarItem.setBounds(100, 140, 100, 30);
             botaoAlterarItem.addActionListener(new ActionListener() {
-                @Override
                 public void actionPerformed(ActionEvent e) {
                     String novaQuantidade = campoQuantidade.getText();
                     String novoTipo = (String) comboTipo.getSelectedItem();
                     String novoTamanho = (String) comboTamanho.getSelectedItem();
     
                     if (!novaQuantidade.isEmpty()) {
-                        modeloTabela.setValueAt(novoTipo, selectedRow, 0);
-                        modeloTabela.setValueAt(novoTamanho, selectedRow, 1);
-                        modeloTabela.setValueAt(novaQuantidade, selectedRow, 2);
+                        try {
+                            String sqlAlterarItemDoacao = "UPDATE itemdoacao SET "
+                            + "qtd = '" + novaQuantidade + "', "
+                            + "cod = (SELECT cod FROM categoria WHERE descricao = '" + novoTipo + "'), "
+                            + "ID_tamanho = (SELECT ID_tamanho FROM tamanho WHERE descricao = '" + novoTamanho + "') "
+                            + "WHERE ID_item = " + idItemDoacao; // Supondo que você tenha essa variável                    
+
+                            int rowsAffectedsqlAlterarItemDoacao = con_cliente.statement.executeUpdate(sqlAlterarItemDoacao);
+                            if(rowsAffectedsqlAlterarItemDoacao>0){
+                            }
+                            else{
+                                JOptionPane.showMessageDialog(null, "Erro ao alterar itemdoacao: Nenhum item alterado", "Erro", JOptionPane.ERROR_MESSAGE);
+                            }
+                        } catch (SQLException exp) {
+                            JOptionPane.showMessageDialog(null, "Erro ao alterar itemdoacao: "+exp, "Erro", JOptionPane.ERROR_MESSAGE);
+                        }
+                        modeloTabela.setValueAt(novoTipo, selectedRow, 1);
+                        modeloTabela.setValueAt(novoTamanho, selectedRow, 2);
+                        modeloTabela.setValueAt(novaQuantidade, selectedRow, 3);
                         modal.dispose();
+
                     } else {
                         JOptionPane.showMessageDialog(modal, "Por favor, insira uma quantidade.");
                     }
@@ -382,7 +461,7 @@ public class TelaDoacao extends JFrame {
     }
 
     public static void main(String[] args) {
-        SwingUtilities.invokeLater(() -> new TelaDoacao(0).setVisible(true));
+        SwingUtilities.invokeLater(() -> new telaDoacao(0).setVisible(true));
     }
 
     // Classe ModeloTabelaNaoEditavel
@@ -391,7 +470,6 @@ public class TelaDoacao extends JFrame {
             super(columnNames, rowCount);
         }
 
-        @Override
         public boolean isCellEditable(int row, int column) {
             return false; // Todas as células são não editáveis
         }
