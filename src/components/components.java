@@ -2,10 +2,12 @@ package components;
 
 import javax.swing.*;
 import java.awt.*;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent; // Certifique-se de que este é o correto
 
 
 public class components extends JFrame{
-        public JLabel criarLabel(String texto, String tagHtml, String fonte, int tamanho, int estilo, int x, int y, int largura, int altura) {
+        public static JLabel criarLabel(String texto, String tagHtml, String fonte, int tamanho, int estilo, int x, int y, int largura, int altura) {
         // Adiciona a tag HTML ao texto
         String textoFormatado = "<html>" + tagHtml + texto + tagHtml.replace("<", "</") + "</html>";
         
@@ -40,7 +42,27 @@ public class components extends JFrame{
         
         // Define a posição e o tamanho do botão
         botao.setBounds(x, y, largura, altura);
-        
+
+        // Remover efeitos de foco e borda
+        botao.setFocusPainted(false); // Remove a borda quando o botão tem foco
+        botao.setBorderPainted(false); // Remove a borda do botão
+
+        // Adiciona o MouseListener para alterar o cursor
+        botao.addMouseListener(new MouseAdapter() {
+            @Override
+            public void mouseEntered(MouseEvent e) {
+                // Muda o cursor para a mão quando o mouse está sobre o botão
+                botao.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
+            }
+
+            @Override
+            public void mouseExited(MouseEvent e) {
+                // Retorna ao cursor padrão quando o mouse sai do botão
+                botao.setCursor(Cursor.getDefaultCursor());
+            }
+        });
+
         return botao;
-    }    
+    }
+
 }
