@@ -259,6 +259,21 @@ public class telaDoacao extends JFrame {
             }
         });
 
+        // Criar botão de sair
+        JButton sairButton = new JButton("Sair");
+        sairButton.setBounds(370, 270, 150, 30); // Definindo posição e tamanho do botão
+        add(sairButton);
+
+        // Adicionar evento para o botão de sair
+        sairButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                menuDoador menuDoador = new menuDoador(idDoador);
+                menuDoador.setVisible(true);
+                dispose();
+            }
+        });
+
         // Botão para Excluir Item
         JButton botaoExcluir = new JButton("Excluir Item");
         botaoExcluir.setBounds(590, 50, 130, 30);

@@ -144,7 +144,7 @@ public class login extends JFrame {
                                 break;
                             case "doador":
                                 dispose();
-                                menuDoador menuDoador = new menuDoador();
+                                menuDoador menuDoador = new menuDoador(userId);
                                 menuDoador.setVisible(true);
                                 break;
                             case "ong":
