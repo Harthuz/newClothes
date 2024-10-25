@@ -39,7 +39,6 @@ public class MenuAdmin extends javax.swing.JFrame {
         jMenu3 = new javax.swing.JMenu();
         jMenuItem1 = new javax.swing.JMenuItem();
         jMenuItem2 = new javax.swing.JMenuItem();
-        jMenu4 = new javax.swing.JMenu();
         jMenu1 = new javax.swing.JMenu();
         jMenuItem3 = new javax.swing.JMenuItem();
         jMenu2 = new javax.swing.JMenu();
@@ -141,10 +140,6 @@ public class MenuAdmin extends javax.swing.JFrame {
         jMenu3.add(jMenuItem2);
 
         jMenuBar2.add(jMenu3);
-
-        jMenu4.setText("Home");
-        jMenu4.setMargin(new java.awt.Insets(0, 20, 0, 2));
-        jMenuBar2.add(jMenu4);
 
         jMenu1.setText("Doadores");
         jMenu1.setMargin(new java.awt.Insets(0, 20, 0, 2));
@@ -312,6 +307,9 @@ CrudOngns crudDialog = new CrudOngns();
     }//GEN-LAST:event_jButton6ActionPerformed
 
     private void jMenuItem5ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem5ActionPerformed
+        doacoesADM doacoesADM = new doacoesADM(); 
+        doacoesADM.setVisible(true);
+        dispose();
     }//GEN-LAST:event_jMenuItem5ActionPerformed
 
     /**
@@ -338,7 +336,6 @@ CrudOngns crudDialog = new CrudOngns();
     private javax.swing.JMenu jMenu1;
     private javax.swing.JMenu jMenu2;
     private javax.swing.JMenu jMenu3;
-    private javax.swing.JMenu jMenu4;
     private javax.swing.JMenu jMenu5;
     private javax.swing.JMenuBar jMenuBar2;
     private javax.swing.JMenuItem jMenuItem1;
