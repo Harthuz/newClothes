@@ -85,7 +85,7 @@ public class telaDoacao extends JFrame {
         botaoAdicionar.addActionListener(e -> {
 
             JDialog modal = new JDialog(this, "Adicionar Item", true);
-            modal.setSize(300, 250);
+            modal.setSize(500, 250);
             modal.setLayout(null);
 
             JLabel labelQuantidade = new JLabel("Quantidade do Item:");
@@ -108,7 +108,7 @@ public class telaDoacao extends JFrame {
             modal.add(labelTipo);
 
             JComboBox<String> comboTipo = new JComboBox<>(getTiposDoBanco());
-            comboTipo.setBounds(160, 60, 100, 25);
+            comboTipo.setBounds(160, 60, 300, 25);
             modal.add(comboTipo);
 
             JLabel labelTamanho = new JLabel("Tamanho:");
