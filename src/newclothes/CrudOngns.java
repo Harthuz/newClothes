@@ -334,7 +334,7 @@ alterar.setForeground(Color.WHITE);
         searchButton.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
               try {
-                  String pesquisa = "select * from doador where nome like '" + searchTextField.getText() + "%'";
+                  String pesquisa = "select * from ong where nome like '" + searchTextField.getText() + "%'";
                   con_cliente.executaSQL(pesquisa);
 
                   if (con_cliente.resultset.first()){
