@@ -27,10 +27,12 @@ public class CrudDoadores extends JFrame {
         super("CRUD Cliente");
         con_cliente = new conexao();
         con_cliente.conecta();
-   
-        
-    
-    Container tela = getContentPane();
+        setIconImage(new javax.swing.ImageIcon(getClass().getResource("/newclothes/newclothesicon.png")).getImage());
+
+
+
+
+        Container tela = getContentPane();
     tela.setLayout(null);
     tela.setBackground(new Color(242, 242, 242));  // Cor de fundo (Lavender);
 

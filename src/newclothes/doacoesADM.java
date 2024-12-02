@@ -26,6 +26,8 @@ public class doacoesADM extends JFrame {
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         setLocationRelativeTo(null); // Centraliza a tela
         setResizable(false);
+        setIconImage(new javax.swing.ImageIcon(getClass().getResource("/newclothes/newclothesicon.png")).getImage());
+
 
         con_cliente = new conexao();
         con_cliente.conecta();

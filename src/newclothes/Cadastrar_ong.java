@@ -28,6 +28,8 @@ public class Cadastrar_ong extends JFrame {
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         setLocationRelativeTo(null);
         setResizable(false);
+        setIconImage(new javax.swing.ImageIcon(getClass().getResource("/newclothes/newclothesicon.png")).getImage());
+
 
         // Abrindo o banco
         con_cliente = new conexao();

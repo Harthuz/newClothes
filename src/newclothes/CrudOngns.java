@@ -28,10 +28,12 @@ public class CrudOngns extends JFrame {
         super("CRUD Ongs Administrador");
         con_cliente = new conexao();
         con_cliente.conecta();
+        setIconImage(new javax.swing.ImageIcon(getClass().getResource("/newclothes/newclothesicon.png")).getImage());
 
 
 
-    Container tela = getContentPane();
+
+        Container tela = getContentPane();
     tela.setLayout(null);
     tela.setBackground(new Color(242, 242, 242));  // Cor de fundo (Lavender);
 

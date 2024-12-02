@@ -36,6 +36,8 @@ public class telaDoacao extends JFrame {
         setDefaultCloseOperation(EXIT_ON_CLOSE);
         setLocationRelativeTo(null);
         setLayout(null);
+        setIconImage(new javax.swing.ImageIcon(getClass().getResource("/newclothes/newclothesicon.png")).getImage());
+
 
         System.out.println(idDoacao);
 

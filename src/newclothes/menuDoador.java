@@ -29,6 +29,8 @@ public class menuDoador extends JFrame {
         setSize(400, 300);
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         setLayout(null);  // Usando layout nulo para setBounds
+        setIconImage(new javax.swing.ImageIcon(getClass().getResource("/newclothes/newclothesicon.png")).getImage());
+
 
         // Header com layout nulo para centralizar manualmente
         JPanel header = new JPanel();

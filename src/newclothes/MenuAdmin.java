@@ -14,7 +14,10 @@ public class MenuAdmin extends javax.swing.JFrame {
      * Creates new form teste
      */
     public MenuAdmin() {
+
         initComponents();
+        this.setLocationRelativeTo(null);
+        setIconImage(new javax.swing.ImageIcon(getClass().getResource("/newclothes/newclothesicon.png")).getImage());
     }
 
     /**
@@ -241,6 +244,7 @@ public class MenuAdmin extends javax.swing.JFrame {
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
+
 
     private void jButton4ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton4ActionPerformed
         CrudDoadores CrudDoadores = new CrudDoadores();

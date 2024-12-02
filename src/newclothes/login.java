@@ -29,6 +29,8 @@ public class login extends JFrame {
         panel.setLayout(null); // Layout absoluto para controlar posições exatas
         panel.setBackground(Color.decode("#F2F2F2")); // Cor de fundo (preto)
 
+        setIconImage(new javax.swing.ImageIcon(getClass().getResource("/newclothes/newclothesicon.png")).getImage());
+
         // Título "Entrar"
         JLabel titleLabel = new JLabel("Entrar");
         titleLabel.setFont(new Font("Arial", Font.BOLD, 28));

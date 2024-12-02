@@ -24,6 +24,8 @@ public class adicionarItem extends JDialog {
 
     public adicionarItem(JFrame parent) {
         super(parent, "Adicionar Item", true); // Set the dialog to be modal
+        setIconImage(new javax.swing.ImageIcon(getClass().getResource("/newclothes/newclothesicon.png")).getImage());
+
 
         // Instanciando classe components
         components = new components();

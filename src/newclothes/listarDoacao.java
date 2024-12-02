@@ -12,6 +12,7 @@ public class listarDoacao {
     components components;
     public listarDoacao(int id) {
         components = new components();
+        components.setIconImage(new javax.swing.ImageIcon(getClass().getResource("/newclothes/newclothesicon.png")).getImage());
 
         // Criar o JFrame
         JFrame frame = new JFrame("Tabela de Doações");

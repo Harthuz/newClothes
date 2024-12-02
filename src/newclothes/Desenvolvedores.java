@@ -7,6 +7,7 @@ public class Desenvolvedores extends JDialog {
     public Desenvolvedores(JFrame parent) {
         super(parent, "Desenvolvedores", true); // Definimos o JDialog como modal
         initComponents();
+        setIconImage(new javax.swing.ImageIcon(getClass().getResource("/newclothes/newclothesicon.png")).getImage());
         setLocationRelativeTo(parent); // Centraliza o diálogo em relação à janela principal
     }
 
@@ -20,6 +21,7 @@ public class Desenvolvedores extends JDialog {
         JLabel jLabel7 = new JLabel();
         JLabel jLabel8 = new JLabel();
         JLabel jLabel9 = new JLabel();
+
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
         setPreferredSize(new java.awt.Dimension(735, 456));

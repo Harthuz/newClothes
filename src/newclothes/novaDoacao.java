@@ -23,6 +23,7 @@ public class novaDoacao extends JFrame{
         setSize(400, 300);
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         setLayout(null);  // Usando layout nulo para setBounds
+        setIconImage(new javax.swing.ImageIcon(getClass().getResource("/newclothes/newclothesicon.png")).getImage());
 
         JLabel tituloLabel = components.criarLabel("SUA DOAÇÃO CONTÉM OS ITENS:","<u>","Arial",14,Font.BOLD,20,20,300,20);
         add(tituloLabel);
