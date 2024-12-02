@@ -208,9 +208,4 @@ public class adicionarItem extends JDialog {
             super.remove(fb, offset, length);
         }
     }
-
-    public static void main(String[] args) {
-        // Pass null as parent to avoid NullPointerException
-        new adicionarItem(null);
-    }
 }

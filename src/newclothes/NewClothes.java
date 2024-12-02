@@ -15,8 +15,4 @@ public class NewClothes {
         }
     }
 
-    public static void main(String[] args) {
-        NewClothes app = new NewClothes(); // Crie uma instância da classe NewClothes
-        app.conectar(); // Chame o método conectar
-    }
 }

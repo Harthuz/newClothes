@@ -187,8 +187,4 @@ public class menuDoador extends JFrame {
         LocalDateTime agora = LocalDateTime.now(); // Obtém a data e hora atuais
         return agora.toLocalDate(); // Extrai apenas a data
     }
-
-    public static void main(String[] args) {
-        new menuDoador(1);
-    }
 }

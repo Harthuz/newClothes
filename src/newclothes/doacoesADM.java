@@ -162,6 +162,10 @@ public class doacoesADM extends JFrame {
         tela.add(excluir);
         tela.add(alterar);
 
+        con_cliente.executaSQL("SELECT * FROM doacao ORDER BY ID_doacao");
+        preencherTabela();
+        posicionarRegistro();
+
         // Ações para os botões de navegação
         primeiro.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
@@ -303,7 +307,6 @@ public class doacoesADM extends JFrame {
             scrollPane.setBounds(20, 220, 500, 150);
             getContentPane().add(scrollPane);
 
-            con_cliente.executaSQL("SELECT * FROM doacao ORDER BY ID_doacao");
             con_cliente.resultset.beforeFirst();
             while (con_cliente.resultset.next()) {
                 String[] linha = {
@@ -322,17 +325,28 @@ public class doacoesADM extends JFrame {
     // Mostrar dados no formulário
     public void mostrar_dados() {
         try {
-            codigoJTextField.setText(con_cliente.resultset.getString("ID_doacao"));
-            dataDoacaoJTextField.setText(con_cliente.resultset.getString("dataDoacao"));
-            idDoadorJTextField.setText(con_cliente.resultset.getString("ID_doador"));
-            idOngJTextField.setText(con_cliente.resultset.getString("ID_ong"));
-        } catch (SQLException e) {
-            JOptionPane.showMessageDialog(null, "Erro ao mostrar dados: " + e, "Mensagem do Programa", JOptionPane.INFORMATION_MESSAGE);
+            // Acessa os dados do resultset
+            String idDoacao = con_cliente.resultset.getString("ID_doacao");
+            String dataDoacao = con_cliente.resultset.getString("dataDoacao");
+            String idDoador = con_cliente.resultset.getString("ID_doador");
+            String idOng = con_cliente.resultset.getString("ID_ong");
+
+            // Atualiza os campos de texto com os valores obtidos
+            codigoJTextField.setText("tesrte");
+            dataDoacaoJTextField.setText(dataDoacao);
+            idDoadorJTextField.setText(idDoador);
+            idOngJTextField.setText(idOng);
+        } catch (SQLException erro) {
+            JOptionPane.showMessageDialog(null, "Erro ao mostrar os dados: " + erro, "Erro", JOptionPane.ERROR_MESSAGE);
         }
     }
 
-    public static void main(String[] args) {
-        doacoesADM app = new doacoesADM();
-        app.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+    public void posicionarRegistro() {
+        try {
+            con_cliente.resultset.first();
+            mostrar_dados();
+        } catch (SQLException erro) {
+            JOptionPane.showMessageDialog(null, "Não foi possível posicionar no primeiro registro: " + erro, "Mensagem do Programa", JOptionPane.ERROR_MESSAGE);
+        }
     }
 }

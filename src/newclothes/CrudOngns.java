@@ -15,7 +15,7 @@ public class CrudOngns extends JFrame {
     conexao con_cliente;
     JTable clienteles; // Defina clienteles como um campo da classe
     DefaultTableModel tableModel; // Adicione um modelo de tabela
-    
+
     JTextField codigoJTextField;
     JTextField nomeJTextField;
     JTextField SenhaJTextField;
@@ -28,9 +28,9 @@ public class CrudOngns extends JFrame {
         super("CRUD Ongs Administrador");
         con_cliente = new conexao();
         con_cliente.conecta();
-   
-        
-    
+
+
+
     Container tela = getContentPane();
     tela.setLayout(null);
     tela.setBackground(new Color(242, 242, 242));  // Cor de fundo (Lavender);
@@ -47,7 +47,7 @@ public class CrudOngns extends JFrame {
         tela.add(codigoJLabel);
 
         codigoJTextField = new JTextField();
-        codigoJTextField.setBounds(90, 20, 100, 20);
+        codigoJTextField.setBounds(90, 20, 200, 20);
         codigoJTextField.setFont(fontePadrao);
         tela.add(codigoJTextField);
 
@@ -73,7 +73,7 @@ public class CrudOngns extends JFrame {
         emailJLabel.setFont(fonteNegrito);
         emailJLabel.setForeground(new Color(0, 51, 102));
         tela.add(emailJLabel);
-        
+
            JLabel EnderecoJLabel = new JLabel("Endereço:");
         EnderecoJLabel.setBounds(20, 140, 100, 20);
         EnderecoJLabel.setFont(fonteNegrito);
@@ -90,7 +90,7 @@ public class CrudOngns extends JFrame {
         TelefoneJLabel.setFont(fonteNegrito);
         TelefoneJLabel.setForeground(new Color(0, 51, 102));
         tela.add(TelefoneJLabel);
-        
+
           JLabel SenhaJLabel = new JLabel("Senha:");
         SenhaJLabel.setBounds(20, 200, 100, 20);
         SenhaJLabel.setFont(fonteNegrito);
@@ -130,8 +130,8 @@ ultimo.setForeground(Color.WHITE);
         anterior.setBackground(new Color(57, 31, 21));
         proximo.setBackground(new Color(57, 31, 21));
         ultimo.setBackground(new Color(57, 31, 21));
-        
-        
+
+
         tela.add(primeiro);
         tela.add(anterior);
         tela.add(proximo);
@@ -147,7 +147,7 @@ ultimo.setForeground(Color.WHITE);
         gravar.setBounds(180, 520, 100, 20);
         excluir.setBounds(290, 520, 100, 20);
         alterar.setBounds(400, 520, 100, 20);
-        
+
         novo.setFont(fontePadrao);
 novo.setForeground(Color.WHITE);
 
@@ -170,7 +170,7 @@ alterar.setForeground(Color.WHITE);
         tela.add(gravar);
         tela.add(excluir);
         tela.add(alterar);
-        
+
         primeiro.addActionListener( new ActionListener(){
         public void actionPerformed(ActionEvent e){
         try{
@@ -181,7 +181,7 @@ alterar.setForeground(Color.WHITE);
         JOptionPane.showMessageDialog(null, "Não foi possivel acessar o primeiro registro");
         }
         }});
-        
+
         anterior.addActionListener( new ActionListener(){
         public void actionPerformed(ActionEvent e){
         try{
@@ -192,7 +192,7 @@ alterar.setForeground(Color.WHITE);
         JOptionPane.showMessageDialog(null, "Não foi possivel acessar o primeiro registro");
         }
         }});
-        
+
         proximo.addActionListener( new ActionListener(){
         public void actionPerformed(ActionEvent e){
         try{
@@ -203,7 +203,7 @@ alterar.setForeground(Color.WHITE);
         JOptionPane.showMessageDialog(null, "Não foi possivel acessar o primeiro registro");
         }
         }});
-        
+
         ultimo.addActionListener( new ActionListener(){
         public void actionPerformed(ActionEvent e){
         try{
@@ -225,7 +225,7 @@ alterar.setForeground(Color.WHITE);
                 TelefoneJFormattedTextField.setText("");
                  SenhaJTextField.setText("");
 
-                
+
                 codigoJTextField.requestFocus();
 
             }});
@@ -354,14 +354,14 @@ alterar.setForeground(Color.WHITE);
         sair.setBackground(new Color(255, 102, 102));  // Cor do fundo (Vermelho claro)
         sair.setForeground(Color.WHITE);  // Cor do texto (Branco)
         tela.add(sair);
-        
+
         // Adiciona um ActionListener para o botão "Sair"
         sair.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
                     // Fecha a janela
                 MenuAdmin MenuAdmin = new MenuAdmin();
-        MenuAdmin.setVisible(true); // Mostra a janela modal;  
+        MenuAdmin.setVisible(true); // Mostra a janela modal;
         dispose();// TODO add your handling code here:
                 dispose();
             }
@@ -373,7 +373,7 @@ alterar.setForeground(Color.WHITE);
         MaskFormatter TelefoneMask;
 
       // CNPJ
-            
+
             try {
                 CNPJMask = new MaskFormatter("##.###.###/####-##");
                 CNPJJFormattedTextField = new JFormattedTextField(CNPJMask);
@@ -382,17 +382,17 @@ alterar.setForeground(Color.WHITE);
             } catch (ParseException e) {
                 e.printStackTrace();
             }
- 
+
             // Telefone
             try {
-                TelefoneMask = new MaskFormatter("(##) ####-####");
+                TelefoneMask = new MaskFormatter("(##) #####-####");
                 TelefoneJFormattedTextField = new JFormattedTextField(TelefoneMask);
                 TelefoneJFormattedTextField.setBounds(100, 170, 100, 25);
                 tela.add(TelefoneJFormattedTextField);
             } catch (ParseException e) {
                 e.printStackTrace();
             }
-          
+
 
         emailJTextField = new JTextField(); // Use o campo da classe
         emailJTextField.setBounds(90, 110, 200, 25);
@@ -402,7 +402,7 @@ alterar.setForeground(Color.WHITE);
         clienteles.setBounds(20, 300, 800, 200);
 
         JScrollPane clienteScrollPane = new JScrollPane();
-        clienteScrollPane.setBounds(20, 300, 800, 200);
+        clienteScrollPane.setBounds(20, 300, 1200, 200);
         tela.add(clienteScrollPane);
 
         clienteles.setBorder(BorderFactory.createLineBorder(Color.BLACK));
@@ -431,7 +431,7 @@ alterar.setForeground(Color.WHITE);
         preencherTabela();
         posicionarRegistro();
 
-        setSize(900, 700);
+        setSize(1500, 700);
         setVisible(true);
         setLocationRelativeTo(null);
     }
@@ -440,14 +440,14 @@ alterar.setForeground(Color.WHITE);
     public void preencherTabela() {
         // Configuração das larguras das colunas
         clienteles.getColumnModel().getColumn(0).setPreferredWidth(50);
-        clienteles.getColumnModel().getColumn(1).setPreferredWidth(150);
-        clienteles.getColumnModel().getColumn(2).setPreferredWidth(150);
-          clienteles.getColumnModel().getColumn(3).setPreferredWidth(150);
-        clienteles.getColumnModel().getColumn(4).setPreferredWidth(150);
-        clienteles.getColumnModel().getColumn(5).setPreferredWidth(100);
-        clienteles.getColumnModel().getColumn(6).setPreferredWidth(90);
-          
-   
+        clienteles.getColumnModel().getColumn(1).setPreferredWidth(450);
+        clienteles.getColumnModel().getColumn(2).setPreferredWidth(460);
+          clienteles.getColumnModel().getColumn(3).setPreferredWidth(200);
+        clienteles.getColumnModel().getColumn(4).setPreferredWidth(480);
+        clienteles.getColumnModel().getColumn(5).setPreferredWidth(180);
+        clienteles.getColumnModel().getColumn(6).setPreferredWidth(140);
+
+
 
         // Limpe o modelo antes de adicionar novas linhas
         tableModel.setRowCount(0);
@@ -463,7 +463,7 @@ alterar.setForeground(Color.WHITE);
                         con_cliente.resultset.getString("endereco"),
                         con_cliente.resultset.getString("telefone"),
                          con_cliente.resultset.getString("Senha")
-                         
+
                 });
             }
         } catch (SQLException erro) {
@@ -487,15 +487,10 @@ alterar.setForeground(Color.WHITE);
             emailJTextField.setText(con_cliente.resultset.getString("email"));
              CNPJJFormattedTextField.setText(con_cliente.resultset.getString("CNPJ"));
             EnderecoJTextField.setText(con_cliente.resultset.getString("Endereco"));
-            TelefoneJFormattedTextField.setText(con_cliente.resultset.getString("Telefone"));
+            TelefoneJFormattedTextField.setText(con_cliente.resultset.getString("telefone"));
              SenhaJTextField.setText(con_cliente.resultset.getString("Senha"));
         } catch (SQLException erro) {
             JOptionPane.showMessageDialog(null, "Não localizou dados: " + erro, "Mensagem do Programa", JOptionPane.ERROR_MESSAGE);
         }
-    }
-
-    public static void main(String[] args) {
-        CrudOngns app = new CrudOngns();
-        app.setDefaultCloseOperation(JFrame.HIDE_ON_CLOSE);
     }
 }

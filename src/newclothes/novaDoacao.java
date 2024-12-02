@@ -34,8 +34,4 @@ public class novaDoacao extends JFrame{
         setLocationRelativeTo(null);
         setSize(420,450);
     }
-
-    public static void main(String[] args) {
-        new novaDoacao();
-    }
 }

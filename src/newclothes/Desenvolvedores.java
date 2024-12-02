@@ -97,17 +97,7 @@ public class Desenvolvedores extends JDialog {
                                 .addContainerGap(88, Short.MAX_VALUE))
         );
 
+        setSize(800, 600);
         pack();
-    }
-
-    public static void main(String[] args) {
-        JFrame parentFrame = new JFrame();
-        parentFrame.setSize(800, 600);
-        parentFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        parentFrame.setVisible(true);
-
-        // Cria e exibe o JDialog modal
-        Desenvolvedores dialog = new Desenvolvedores(parentFrame);
-        dialog.setVisible(true);
     }
 }

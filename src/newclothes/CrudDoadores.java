@@ -456,9 +456,4 @@ alterar.setForeground(Color.WHITE);
             JOptionPane.showMessageDialog(null, "Não localizou dados: " + erro, "Mensagem do Programa", JOptionPane.ERROR_MESSAGE);
         }
     }
-    public static void main(String[] args) {
-        CrudDoadores app = new CrudDoadores();
-        app.setDefaultCloseOperation(JFrame.HIDE_ON_CLOSE);
-    }
-    
 }
